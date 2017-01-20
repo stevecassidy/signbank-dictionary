@@ -12,7 +12,7 @@ class DictionaryURLs(TestCase):
         '''
         found = resolve('/')
         self.assertEqual(found.func, search)
-            
+
     def test_search_url_resolves_to_search_view(self):
         '''
         '/search/' should be routed to the search function
@@ -26,14 +26,13 @@ class DictionaryURLs(TestCase):
         '/words/jet-1/', for example, should be routed
         to the word view.
         '''
-        found = resolve('/words/jet-1/')
+        found = resolve('/words/jet-1.html')
         self.assertEqual(found.func, word)
-        
+
     def test_gloss_url_resolves_to_gloss_view(self):
         '''
-        '/gloss/1/', for example, should be routed 
+        '/gloss/1/', for example, should be routed
         to the gloss view.
         '''
-        found = resolve('/gloss/1/')
+        found = resolve('/gloss/1.html')
         self.assertEqual(found.func, gloss)
-           

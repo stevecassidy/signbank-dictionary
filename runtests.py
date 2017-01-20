@@ -21,13 +21,15 @@ try:
             "django.contrib.contenttypes",
             "django.contrib.sites",
             "dictionary",
-            "tagging"
+            "tagging",
+            "video",
+            "feedback"
         ],
         SITE_ID=1,
         MIDDLEWARE_CLASSES=(),
-        
+
         FIXTURE_DIRS = [os.path.join(BASE_DIR, 'tests', 'fixtures')],
-        
+
         MIDDLEWARE = [
             'django.middleware.security.SecurityMiddleware',
             'django.contrib.sessions.middleware.SessionMiddleware',
@@ -36,9 +38,9 @@ try:
             'django.contrib.auth.middleware.AuthenticationMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
             'django.middleware.clickjacking.XFrameOptionsMiddleware',
-           
+
 ],
-                
+
          TEMPLATES = [
           {
           'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -63,15 +65,20 @@ try:
     },
 ],
         LANGUAGE_NAME = 'Auslan',
-        
+
         ALWAYS_REQUIRE_LOGIN = True,
         ANON_SAFE_SEARCH = False,
-        
+        QUICK_UPDATE_GLOSS_FIELDS = ['language', 'dialect'],
+        VIDEO_UPLOAD_LOCATION = '/tmp',
+        GLOSS_VIDEO_DIRECTORY = '/tmp',
+        SHOW_TRADITIONAL = True,
+        SHOW_FREQUENCY = True,
+
 # which definition fields do we show and in what order?
 DEFINITION_FIELDS = ['general', 'noun', 'verb', 'interact', 'diectic', 'modifier', 'question', 'augment', 'note'],
 DEFINITION_ROLE_CHOICES = (('general', 'General Definition'),
     ('noun', 'As a Noun'),
-    ('verb', 'As a Verb or Adjective'), 
+    ('verb', 'As a Verb or Adjective'),
     ('deictic', 'As a Pointing Sign'),
     ('interact', 'Interactive'),
     ('modifier', 'As Modifier'),
@@ -86,9 +93,9 @@ DEFINITION_ROLE_CHOICES = (('general', 'General Definition'),
 SIGN_NAVIGATION = True,
 # settings for django-tagging
 ANON_TAG_SEARCH = False,
-FORCE_LOWERCASE_TAGS = True, 
+FORCE_LOWERCASE_TAGS = True,
 # a list of tags we're allowed to use
-ALLOWED_TAGS = [ '', 
+ALLOWED_TAGS = [ '',
                  'b92:directional',
                  'b92:regional',
                  'corpus:attested',
@@ -185,10 +192,8 @@ ALLOWED_TAGS = [ '',
                  'workflow:needs video',
                  'workflow:redo video',
                  'workflow:problematic',
-                 ]
-        
-    )
-
+                 ],
+                 )
 
     try:
         import django
@@ -197,6 +202,7 @@ ALLOWED_TAGS = [ '',
         pass
     else:
         setup()
+
 
 except ImportError:
     import traceback
