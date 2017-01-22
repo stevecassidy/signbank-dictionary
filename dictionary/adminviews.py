@@ -8,7 +8,8 @@ import re
 
 from .models import *
 from .forms import *
-from feedback.models import *
+from feedback.forms import InterpreterFeedbackForm
+from feedback.models import InterpreterFeedback
 from video.forms import VideoUploadForGlossForm
 from tagging.models import Tag, TaggedItem
 
@@ -279,6 +280,7 @@ class GlossDetailView(DetailView):
         context['relationform'] = RelationForm()
         context['navigation'] = context['gloss'].navigation(True)
         context['interpform'] = InterpreterFeedbackForm()
+        context['interpreterfeedback'] = InterpreterFeedback.objects.filter(glossid__exact=context['gloss'].id)
         context['SIGN_NAVIGATION']  = settings.SIGN_NAVIGATION
         if settings.SIGN_NAVIGATION:
             context['glosscount'] = Gloss.objects.count()

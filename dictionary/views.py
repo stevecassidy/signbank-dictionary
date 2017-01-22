@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, RequestContext, loader
 from django.http import Http404
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -40,7 +40,7 @@ def index(request):
     point to the dictionary"""
 
 
-    return render_to_response("dictionary/search_result.html",
+    return render(request, "dictionary/search_result.html",
                               {'form': UserSignSearchForm(),
                                'language': settings.LANGUAGE_NAME,
                                'query': '',
@@ -133,7 +133,7 @@ def variant(request, idgloss):
     except:
         regional_template_content = None
 
-    return render_to_response("dictionary/variant.html",
+    return render(request, "dictionary/variant.html",
                               {'translation': None,
                                'viewname': 'words',
                                'definitions': gloss.definitions(),
@@ -232,37 +232,38 @@ def word(request, keyword, n):
     except:
         regional_template_content = None
 
-    return render_to_response("dictionary/word.html",
-                              {'translation': trans,
-                               'viewname': 'words',
-                               'definitions': trans.gloss.definitions(),
-                               'thumbnails': thumbnails,
-                               'allkwds': allkwds,
-                               'n': n,
-                               'total': total,
-                               'matches': list(range(1, total+1)),
-                               'navigation': nav,
-                               'dialect_image': map_image_for_regions(gloss.region_set),
-                               'regions': regions,
-                               'regional_template_content': regional_template_content,
-                               # lastmatch is a construction of the url for this word
-                               # view that we use to pass to gloss pages
-                               # could do with being a fn call to generate this name here and elsewhere
-                               'lastmatch': str(trans.translation)+"-"+str(n),
-                               'videofile': videourl,
-                               'update_form': update_form,
-                               'videoform': video_form,
-                               'gloss': gloss,
-                               'glosscount': glosscount,
-                               'glossposn': glossposn,
-                               'feedback' : True,
-                               'feedbackmessage': feedbackmessage,
-                               'tagform': TagUpdateForm(),
-                               'SIGN_NAVIGATION' : settings.SIGN_NAVIGATION,
-                               'SETTINGS_SHOW_TRADITIONAL' : settings.SHOW_TRADITIONAL,
-                               'SETTINGS_SHOW_FREQUENCY' : settings.SHOW_FREQUENCY,
-                               'DEFINITION_FIELDS' : settings.DEFINITION_FIELDS,
-                               })
+    context = {'translation': trans,
+     'viewname': 'words',
+     'definitions': trans.gloss.definitions(),
+     'thumbnails': thumbnails,
+     'allkwds': allkwds,
+     'n': n,
+     'total': total,
+     'matches': list(range(1, total+1)),
+     'navigation': nav,
+     'dialect_image': map_image_for_regions(gloss.region_set),
+     'regions': regions,
+     'regional_template_content': regional_template_content,
+     # lastmatch is a construction of the url for this word
+     # view that we use to pass to gloss pages
+     # could do with being a fn call to generate this name here and elsewhere
+     'lastmatch': str(trans.translation)+"-"+str(n),
+     'videofile': videourl,
+     'update_form': update_form,
+     'videoform': video_form,
+     'gloss': gloss,
+     'glosscount': glosscount,
+     'glossposn': glossposn,
+     'feedback' : True,
+     'feedbackmessage': feedbackmessage,
+     'tagform': TagUpdateForm(),
+     'SIGN_NAVIGATION' : settings.SIGN_NAVIGATION,
+     'SETTINGS_SHOW_TRADITIONAL' : settings.SHOW_TRADITIONAL,
+     'SETTINGS_SHOW_FREQUENCY' : settings.SHOW_FREQUENCY,
+     'DEFINITION_FIELDS' : settings.DEFINITION_FIELDS,
+     }
+
+    return render(request, "dictionary/word.html", context)
 
 
 
@@ -354,7 +355,7 @@ def gloss(request, idgloss):
     except:
         regional_template_content = None
 
-    return render_to_response("dictionary/word.html",
+    return render(request, "dictionary/word.html",
                               {'translation': trans,
                                'definitions': gloss.definitions(),
                                'thumbnails': thumbnails,
@@ -465,7 +466,7 @@ def search(request):
 
     (result_page, paginator) = paginate(request, words, 50)
 
-    return render_to_response("dictionary/search_result.html",
+    return render(request, "dictionary/search_result.html",
                               {'query' : term,
                                'form': form,
                                'paginator' : paginator,
@@ -501,7 +502,7 @@ def missing_video_view(request):
 
     glosses = missing_video_list()
 
-    return render_to_response("dictionary/missingvideo.html",
+    return render(request, "dictionary/missingvideo.html",
                               {'glosses': glosses})
 
 

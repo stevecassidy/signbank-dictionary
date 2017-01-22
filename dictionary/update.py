@@ -24,7 +24,7 @@ def add_gloss(request):
 
             return HttpResponseRedirect(reverse('dictionary:admin_gloss_view', kwargs={'pk': gloss.id})+'?edit')
         else:
-            return render_to_response('dictionary/add_gloss_form.html',
+            return render(request, 'dictionary/add_gloss_form.html',
                                       {'add_gloss_form': form},
                                       context_instance=RequestContext(request))
 
@@ -136,8 +136,7 @@ def update_gloss(request, glossid):
 
         else:
 
-
-            if not field in Gloss._meta.get_all_field_names():
+            if not field in [f.name for f in Gloss._meta.get_fields()]:
                 return HttpResponseBadRequest("Unknown field", {'content-type': 'text/plain'})
 
             # special cases
@@ -443,7 +442,7 @@ def add_tag(request, glossid):
                 # we need to wrap the tag name in quotes since it might contain spaces
                 Tag.objects.add_tag(thisgloss, '"%s"' % tag)
                 # response is new HTML for the tag list and form
-                response = render_to_response('dictionary/glosstags.html',
+                response = render(request, 'dictionary/glosstags.html',
                                               {'gloss': thisgloss,
                                                'tagform': TagUpdateForm(),
                                                },

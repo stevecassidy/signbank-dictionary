@@ -20,6 +20,7 @@ try:
             "django.contrib.auth",
             "django.contrib.contenttypes",
             "django.contrib.sites",
+            'bootstrap3',
             "dictionary",
             "tagging",
             "video",
@@ -73,6 +74,7 @@ try:
         GLOSS_VIDEO_DIRECTORY = '/tmp',
         SHOW_TRADITIONAL = True,
         SHOW_FREQUENCY = True,
+        ADMIN_RESULT_FIELDS = ['sn', 'idgloss', 'annotation_idgloss', 'morph'],
 
 # which definition fields do we show and in what order?
 DEFINITION_FIELDS = ['general', 'noun', 'verb', 'interact', 'diectic', 'modifier', 'question', 'augment', 'note'],

@@ -1,5 +1,5 @@
 {% extends 'baselayout.html' %}
-{% load stylesheet %}
+{% load valuetag %}
 {% load bootstrap3 %}
 {% load static %}
 
@@ -113,7 +113,7 @@
 
     {% else %}
     <div id='player'>
-     <img src="{% static 'images/no-video.png' %}">
+     <img src="{% static 'img/no-video.png' %}">
     </div>
     {% endif %}
 
@@ -191,7 +191,7 @@
                     <div class='modal-body'>
                         <p>This action will delete all interpreter notes on this sign. It cannot be undone.</p>
                      </div>
-                  <form action='{% url "intnote" gloss.id %}' method='post'>
+                  <form action='{% url "feedback:intnote" gloss.id %}' method='post'>
                       {% csrf_token %}
                       <input type='hidden' name='action' value='delete_all'>
                       <div class="modal-footer">
@@ -206,7 +206,7 @@
          {% endif %}
 
         {% if perms.feedback.add_interpreterfeedback %}
-        <form action='/feedback/interpreter/{{gloss.pk}}' method='post'>
+        <form action="{% url 'feedback:intnote' gloss.pk %}" method='post'>
             {% csrf_token %}
             {% bootstrap_field interpform.comment show_label=False %}
             {% buttons %}
@@ -218,7 +218,7 @@
         {% endif %}
 
         <table class='table'>
-        {% for fb in gloss.interpreterfeedback_set.all %}
+        {% for fb in interpreterfeedback %}
             <tr><th>{{fb.user.first_name}} {{fb.user.last_name}}</th>
                 <th>{{fb.date}}</th>
                 <td>
@@ -239,7 +239,7 @@
                                     <p>{{fb.comment}}</p>
                                     <p>This action will delete this note. It cannot be undone.</p>
                                  </div>
-                              <form action='{% url "intnote" gloss.id %}' method='post'>
+                              <form action='{% url "feedback:intnote" gloss.id %}' method='post'>
                                   {% csrf_token %}
                                   <input type='hidden' name='action' value='delete'>
                                   <input type='hidden' name='id' value='{{fb.id}}'>

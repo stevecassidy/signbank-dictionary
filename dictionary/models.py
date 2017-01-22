@@ -11,13 +11,10 @@ from django.db import models
 from django.conf import settings
 from django.http import Http404
 from tagging.registry import register, AlreadyRegistered
+from video.models import GlossVideo
 
 import sys, os
 import json
-
-#from signbank.video.models import GlossVideo
-
-#from models_legacy import Sign
 
 
 class Translation(models.Model):
@@ -504,7 +501,8 @@ minor or insignificant ways that can be ignored.""")
         video_with_gloss = self.get_video_gloss()
 
         try:
-            video = video_with_gloss.glossvideo_set.get(version__exact=0)
+            #video = video_with_gloss.glossvideo_set.get(version__exact=0)
+            video = GlossVideo.objects.get(gloss_id=video_with_gloss.id, version__exact=0)
             return video
         except:
             return None
@@ -513,10 +511,9 @@ minor or insignificant ways that can be ignored.""")
         """Return a count of the number of videos we have
         for this video - ie. the number of versions stored"""
 
-
         video_with_gloss = self.get_video_gloss()
 
-        return video_with_gloss.glossvideo_set.count()
+        return GlossVideo.objects.filter(gloss_id__exact=video_with_gloss).count()
 
 
     def get_video_url(self):
