@@ -1,5 +1,6 @@
 {% extends "baselayout.html" %}
 {% load static %}
+{% load videotags %}
 
 {% block pagetitle %}{{ settings_site_title }} - Sign for {{ translation.translation }} {% endblock %}
 
@@ -8,6 +9,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'zoomgallery/magnific.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'zoomgallery/zoom.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/variant.css' %}">
+
+    <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+    <link href="{% static 'css/custom-player.css' %}" rel="stylesheet">
+	<link href="{% static 'loopbutton/videojs.loopbutton.css' %}" rel="stylesheet">
+
+
 {% endblock %}
 
 {% block extrajs %}
@@ -15,6 +22,14 @@
    	<script src="{% static 'jcarousel/jcarousel.responsive.js' %}"></script>
    	<script src="{% static 'zoomgallery/magnific.js' %}"></script>
    	<script src="{% static 'zoomgallery/zoom.js' %}"></script>
+
+	<!-- JS required for video display -->
+    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+	<!-- I have changed some parts of this js file -->
+	<script type="text/javascript" src="{% static 'loopbutton/videojs.loopbutton.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/videoplayersetup.js' %}"></script>
+    <!-- end video JS -->
+
    	<script language='javascript'>
    		function topmap() {
 			var winwidth = $( window ).width();
@@ -43,6 +58,7 @@
 			topmap();
 		});
 	</script>
+
 {% endblock %}
 
 {% block jqueryready %}
@@ -123,9 +139,7 @@
 	        <div class='col-md-4'>
 	            <div id="videocontainer">
 	               <div id="player">
-	                  <iframe id='videoiframe' scrolling="no" frameborder='0' allowfullscreen="allowfullscreen"
-	                          src="{% url 'video:iframe' videoid=gloss.pk %}">
-	                  </iframe>
+					   {% videoplayer elementid='signvideo' category='Gloss' tag=gloss.pk width=308 height=250 %}
 	               </div>
 	               <div id="replay"></div>
 	            </div>

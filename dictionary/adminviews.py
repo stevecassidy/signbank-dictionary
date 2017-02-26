@@ -10,7 +10,7 @@ from .models import *
 from .forms import *
 from feedback.forms import InterpreterFeedbackForm
 from feedback.models import InterpreterFeedback
-from video.forms import VideoUploadForGlossForm
+from video.forms import VideoUploadForm
 from tagging.models import Tag, TaggedItem
 
 class GlossListView(ListView):
@@ -275,7 +275,7 @@ class GlossDetailView(DetailView):
         context = super(GlossDetailView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         context['tagform'] = TagUpdateForm()
-        context['videoform'] = VideoUploadForGlossForm()
+        context['videoform'] = VideoUploadForm()
         context['definitionform'] = DefinitionForm()
         context['relationform'] = RelationForm()
         context['navigation'] = context['gloss'].navigation(True)

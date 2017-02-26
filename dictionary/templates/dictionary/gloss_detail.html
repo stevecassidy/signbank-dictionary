@@ -2,9 +2,15 @@
 {% load valuetag %}
 {% load bootstrap3 %}
 {% load static %}
+{% load videotags %}
 
 {% block extrahead %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/tagmanager.css' %}">
+
+    <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+    <link href="{% static 'css/custom-player.css' %}" rel="stylesheet">
+	<link href="{% static 'loopbutton/videojs.loopbutton.css' %}" rel="stylesheet">
+
 {% endblock %}
 
 {% block extrajs %}
@@ -12,6 +18,12 @@
     <script type="text/javascript" src="{% static 'js/jquery.jeditable.checkbox.js'  %}"></script>
     <script type="text/javascript" src="{% static 'js/typeahead.bundle.min.js' %}"></script>
 
+    <!-- JS required for video display -->
+    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+	<!-- I have changed some parts of this js file -->
+	<script type="text/javascript" src="{% static 'loopbutton/videojs.loopbutton.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/videoplayersetup.js' %}"></script>
+    <!-- end video JS -->
 
     {% if perms.dictionary.change_gloss %}
 
@@ -102,21 +114,9 @@
 <div id="definitionblock">
     <div id="leftblock">
     <div id="videocontainer">
-    {% if gloss.get_video %}
-
         <div id="player">
-          <iframe id='videoiframe' scrolling="no" frameborder='0' allowfullscreen="allowfullscreen"
-              src="{% url 'video:iframe' videoid=gloss.pk %}">
-          </iframe>
+            {% videoplayer elementid='signvideo' category='Gloss' tag=gloss.pk width=308 height=270 %}
         </div>
-        <div id="replay"></div>
-
-    {% else %}
-    <div id='player'>
-     <img src="{% static 'img/no-video.png' %}">
-    </div>
-    {% endif %}
-
     </div>
 
     <div id="feedback">
@@ -139,7 +139,7 @@
         <fieldset>
             <legend>Upload New Video</legend>
             <p>We have {{gloss.count_videos}} videos for this sign.</p>
-            <form action="/video/upload/" method="post" enctype="multipart/form-data" id="video_upload_form">
+            <form action="{% url 'video:upload' %}" method="post" enctype="multipart/form-data" id="video_upload_form">
               {% csrf_token %}
               <input type='hidden' name='redirect' value='{{request.path}}?edit'>
             <table id="staffops">
@@ -147,7 +147,8 @@
                   <td>{{videoform.videofile}}</td>
               </tr>
               <tr>
-                  <td><input type='hidden' name='gloss_id' value='{{gloss.pk}}'>
+                  <td><input type='hidden' name='category' value='Gloss'>
+                      <input type='hidden' name='tag' value='{{gloss.id}}'>
                       <input class='btn btn-primary' type='submit' value='Upload Video'/></td>
               </tr>
             </table>
@@ -158,7 +159,7 @@
         <fieldset>
          <legend>Delete/Revert Video</legend>
             <table>
-            <form action="/video/delete/{{gloss.pk}}" method='post'>
+            <form action="{% url 'video:delete' category='Gloss' tag=gloss.id %}" method='post'>
             <tr><td><em>This will delete the most recent upload and restore the most recent earlier version.</em></td></tr>
             <tr><td>{% csrf_token %}<input class='btn btn-danger' id='delete_video' type='submit' value='Delete/Revert this video'></td></tr>
             </form>

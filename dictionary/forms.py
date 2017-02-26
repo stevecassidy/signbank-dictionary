@@ -1,5 +1,4 @@
 from django import forms
-from video.fields import VideoUploadToFLVField
 from .models import Dialect, Gloss, Definition, Relation, Region, defn_role_choices,\
     Relationrole
 from django.conf import settings
@@ -27,11 +26,6 @@ class GlossCreateForm(forms.ModelForm):
     class Meta:
         model = Gloss
         fields = ['idgloss', 'annotation_idgloss', 'sn']
-
-
-class VideoUpdateForm(forms.Form):
-    """Form to allow update of the video for a sign"""
-    videofile = VideoUploadToFLVField()
 
 
 class TagUpdateForm(forms.Form):

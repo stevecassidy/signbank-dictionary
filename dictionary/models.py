@@ -11,7 +11,7 @@ from django.db import models
 from django.conf import settings
 from django.http import Http404
 from tagging.registry import register, AlreadyRegistered
-from video.models import GlossVideo
+from video.models import TaggedVideo
 
 import sys, os
 import json
@@ -495,15 +495,19 @@ minor or insignificant ways that can be ignored.""")
                 return homophones[0].target
         return self
 
+    def videoid(self):
+        """Return a suitable identifier for the video associated with this gloss
+        as a string"""
+
+        return str(self.sn)
+
     def get_video(self):
         """Return the video object for this gloss or None if no video available"""
 
         video_with_gloss = self.get_video_gloss()
 
         try:
-            #video = video_with_gloss.glossvideo_set.get(version__exact=0)
-            video = GlossVideo.objects.get(gloss_id=video_with_gloss.id, version__exact=0)
-            return video
+            return TaggedVideo.objects.get(category="Gloss", tag=video_with_gloss.pk)
         except:
             return None
 
@@ -511,17 +515,17 @@ minor or insignificant ways that can be ignored.""")
         """Return a count of the number of videos we have
         for this video - ie. the number of versions stored"""
 
-        video_with_gloss = self.get_video_gloss()
-
-        return GlossVideo.objects.filter(gloss_id__exact=video_with_gloss).count()
-
+        video = self.get_video()
+        if video is not None:
+            return video.versions()
+        else:
+            return 0
 
     def get_video_url(self):
         """return  the url of the video for this gloss which may be that of a homophone"""
 
-
         video = self.get_video()
-        if video != None:
+        if video is not None:
             return video.get_absolute_url()
         else:
             return ""

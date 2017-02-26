@@ -18,7 +18,7 @@ from .forms import *
 #from signbank.feedback.models import *
 #from signbank.pages.models import *
 
-from video.forms import VideoUploadForGlossForm
+from video.forms import VideoUploadForm
 
 
 def login_required_config(function):
@@ -119,8 +119,9 @@ def variant(request, idgloss):
 
     if request.user.has_perm('dictionary.search_gloss'):
         update_form = GlossModelForm(instance=gloss)
-        video_form = VideoUploadForGlossForm(initial={'gloss_id': gloss.pk,
-                                                      'redirect': request.path})
+        video_form = VideoUploadForm(initial={'category': 'Gloss',
+                                              'tag': gloss.pk,
+                                              'redirect': request.get_full_path()})
     else:
         update_form = None
         video_form = None
@@ -218,8 +219,9 @@ def word(request, keyword, n):
 
     if request.user.has_perm('dictionary.search_gloss'):
         update_form = GlossModelForm(instance=trans.gloss)
-        video_form = VideoUploadForGlossForm(initial={'gloss_id': trans.gloss.pk,
-                                                      'redirect': request.path})
+        video_form = VideoUploadForm(initial={'category': 'Gloss',
+                                              'tag': trans.gloss.pk,
+                                              'redirect': request.get_full_path()})
     else:
         update_form = None
         video_form = None
@@ -331,8 +333,9 @@ def gloss(request, idgloss):
 
     if request.user.has_perm('dictionary.search_gloss'):
         update_form = GlossModelForm(instance=gloss)
-        video_form = VideoUploadForGlossForm(initial={'gloss_id': gloss.pk,
-                                                      'redirect': request.get_full_path()})
+        video_form = VideoUploadForm(initial={'category': 'Gloss',
+                                              'tag': gloss.pk,
+                                              'redirect': request.get_full_path()})
     else:
         update_form = None
         video_form = None
