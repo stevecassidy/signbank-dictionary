@@ -560,10 +560,7 @@ minor or insignificant ways that can be ignored.""")
     def options_to_json(self, options):
         """Convert an options list to a json dict"""
 
-        result = []
-        for k, v in options:
-            result.append('"%s":"%s"' % (k, v))
-        return "{" + ",".join(result) + "}"
+        return json.dumps(dict(options))
 
     def handshape_choices_json(self):
         """Return JSON for the handshape choice list"""
