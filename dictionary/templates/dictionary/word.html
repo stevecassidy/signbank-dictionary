@@ -10,11 +10,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'zoomgallery/zoom.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/variant.css' %}">
 
-    <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+    <link href="//vjs.zencdn.net/5.4.6/video-js.css" rel="stylesheet">
     <link href="{% static 'css/custom-player.css' %}" rel="stylesheet">
 	<link href="{% static 'loopbutton/videojs.loopbutton.css' %}" rel="stylesheet">
-
-
 {% endblock %}
 
 {% block extrajs %}
@@ -24,9 +22,9 @@
    	<script src="{% static 'zoomgallery/zoom.js' %}"></script>
 
 	<!-- JS required for video display -->
-    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+    <script src="//vjs.zencdn.net/5.4.6/video.js"></script>
 	<!-- I have changed some parts of this js file -->
-	<script type="text/javascript" src="{% static 'loopbutton/videojs.loopbutton.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'loopbutton/videojs.loopbutton.js' %}"></script>
 	<script type="text/javascript" src="{% static 'js/videoplayersetup.js' %}"></script>
     <!-- end video JS -->
 
@@ -141,7 +139,6 @@
 	               <div id="player">
 					   {% videoplayer elementid='signvideo' category='Gloss' tag=gloss.pk width=308 height=250 %}
 	               </div>
-	               <div id="replay"></div>
 	            </div>
 
 		        <div id="keywords">
@@ -155,45 +152,7 @@
 
 	        <div  class='col-md-8'>
 			{% if thumbnails %}
-			<script type="text/javascript">
-				function replay(id) {
-			    	iframe = $(id);
-			    	$('#sign_html5_api', iframe.contents())[0].play();
-			    }
-
-				function load(idgloss){
-					$( "#variant-container" ).load( "{% url 'dictionary:public_variant' idgloss=idgloss %}" );
-				}
-			</script>
-		    	<p><strong>Found {{thumbnails|length}} variant{% if thumbnails|length|add:"0" > 1 %}s{% endif %} for this sign (click on video to enlarge):</strong></p>
-		     	<div id='thumbnailscontainer' class='jcarousel-wrapper'>
-		     		<div id='thumbnailsrow' class='jcarousel' data-jcarousel="true">
-		     			<ul style="left: 0px; top: 0px;">
-			     			{% for thumbnail in thumbnails %}
-			     				<li>
-				     				<div class='col-lg-3 col-md-4 col-xs-6 thumb'>
-				     					<a class='thumbnail popup-with-zoom-anim' target='mainvideo'
-				     						href="#small-dialog" onclick='load("{{thumbnail.idgloss}}")'>
-				     						<iframe class='thumbnailiframe'
-				     								id='thumbnailiframe-{{thumbnail.idgloss}}'
-				     								scrolling="no" frameborder='0'
-				     								src="{% url 'signbank.video.views.thumbnail' thumbnail.pk %}">
-			                  				</iframe>
-			                  				<span class="thumbnailcover"
-				     								onmouseover='replay("#thumbnailiframe-{{thumbnail.idgloss}}")'>
-			                  				</span>
-				     					</a>
-				     				</div>
-				     			</li>
-			     			{% endfor %}
-			     		</ul>
-	   					<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
-	   						<div id='variant-container'></div>
-	   					</div>
-		     		</div>
-		     		<a href="#" class="jcarousel-control-prev inactive" data-jcarouselcontrol="true">‹  </a>
-		     		<a href="#" class="jcarousel-control-next" data-jcarouselcontrol="true">  ›</a>
-		     	</div>
+				{% include "dictionary/variant-thumbnails.html" %}
 		    {% endif %}
 
 		    {% if DEFINITION_FIELDS and gloss.published_definitions %}
@@ -212,7 +171,11 @@
 
 	                          <ol>
 	                          {% for def in role.list %}
-	                            <li>{{def.text}}</li>
+	                            <li>{{def.text}}
+									{% if def.video %}
+										{% videoplayer elementid=foo category='Definition' tag=def.id height=100 width=120 %}
+									{% endif %}
+								</li>
 	                          {% endfor %}
 	                          </ol>
 

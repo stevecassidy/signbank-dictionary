@@ -117,7 +117,8 @@ class GlossListView(ListView):
         if 'hasvideo' in get and get['hasvideo'] != 'unspecified':
             val = get['hasvideo'] == 'no'
 
-            qs = qs.filter(glossvideo__isnull=val)
+            # TODO: need to convert this to taggedvideo model
+            #qs = qs.filter(glossvideo__isnull=val)
 
         if 'defspublished' in get and get['defspublished'] != 'unspecified':
             val = get['defspublished'] == 'yes'

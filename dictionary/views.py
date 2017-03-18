@@ -85,32 +85,16 @@ def variant(request, idgloss):
     # and all the keywords associated with this sign
     allkwds = gloss.translation_set.all()
 
-    videourl = gloss.get_video_url()
-    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, videourl)):
-        videourl = None
-
     homophones = gloss.relation_sources.filter(role=Relationrole.objects.get(role="homophone"))
 
     # work out the number of this gloss and the total number
     can_view_not_inWeb = request.user.has_perm('dictionary.search_gloss')
-    gloss = trans.gloss
+
     (glossposn, glosscount) = get_gloss_position(gloss, can_view_not_inWeb)
 
-
-    thumbnails = None
-    variant_relations = list(Relation.objects.filter(source__exact=gloss, role__role__exact="variant").all())
-    variants = []
-    if request.user.has_perm('dictionary.search_gloss'):
-        variants = [relation.target for relation in variant_relations]
-    else:
-        variants = [relation.target for relation in variant_relations if relation.target.inWeb == True]
-    if len(variants) > 0:
-        thumbnails = []
-        for variant in variants:
-            thumbnail = {}
-            thumbnail['pk'] = variant.pk
-            thumbnail['idgloss'] = variant.idgloss
-            thumbnails.append(thumbnail)
+    videourl = gloss.get_video_url()
+    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, videourl)):
+        videourl = None
 
     # navigation gives us the next and previous signs
     nav = gloss.navigation(request.user.has_perm('dictionary.search_gloss'))
@@ -139,7 +123,6 @@ def variant(request, idgloss):
                                'viewname': 'words',
                                'definitions': gloss.definitions(),
                                'gloss': gloss,
-                               'thumbnails': thumbnails,
                                'allkwds': allkwds,
                                'n': 0,
                                'total': 0,
@@ -186,10 +169,6 @@ def word(request, keyword, n):
     # and all the keywords associated with this sign
     allkwds = trans.gloss.translation_set.all()
 
-    videourl = trans.gloss.get_video_url()
-    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, videourl)):
-        videourl = None
-
     trans.homophones = trans.gloss.relation_sources.filter(role__role__exact="homophone")
 
     # work out the number of this gloss and the total number
@@ -197,13 +176,18 @@ def word(request, keyword, n):
     gloss = trans.gloss
     (glossposn, glosscount) = get_gloss_position(gloss, can_view_not_inWeb)
 
+    videourl = trans.gloss.get_video_url()
+    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, videourl)):
+        videourl = None
+
     thumbnails = None
-    variant_relations = list(Relation.objects.filter(source=gloss, role__role__exact="variant").all())
-    variants = []
+    variant_relations = Relation.objects.filter(source__exact=gloss, role__role__exact="variant")
+
     if request.user.has_perm('dictionary.search_gloss'):
         variants = [relation.target for relation in variant_relations]
     else:
         variants = [relation.target for relation in variant_relations if relation.target.inWeb == True]
+
     if len(variants) > 0:
         thumbnails = []
         for variant in variants:
@@ -235,35 +219,35 @@ def word(request, keyword, n):
         regional_template_content = None
 
     context = {'translation': trans,
-     'viewname': 'words',
-     'definitions': trans.gloss.definitions(),
-     'thumbnails': thumbnails,
-     'allkwds': allkwds,
-     'n': n,
-     'total': total,
-     'matches': list(range(1, total+1)),
-     'navigation': nav,
-     'dialect_image': map_image_for_regions(gloss.region_set),
-     'regions': regions,
-     'regional_template_content': regional_template_content,
-     # lastmatch is a construction of the url for this word
-     # view that we use to pass to gloss pages
-     # could do with being a fn call to generate this name here and elsewhere
-     'lastmatch': str(trans.translation)+"-"+str(n),
-     'videofile': videourl,
-     'update_form': update_form,
-     'videoform': video_form,
-     'gloss': gloss,
-     'glosscount': glosscount,
-     'glossposn': glossposn,
-     'feedback' : True,
-     'feedbackmessage': feedbackmessage,
-     'tagform': TagUpdateForm(),
-     'SIGN_NAVIGATION' : settings.SIGN_NAVIGATION,
-     'SETTINGS_SHOW_TRADITIONAL' : settings.SHOW_TRADITIONAL,
-     'SETTINGS_SHOW_FREQUENCY' : settings.SHOW_FREQUENCY,
-     'DEFINITION_FIELDS' : settings.DEFINITION_FIELDS,
-     }
+             'viewname': 'words',
+             'definitions': trans.gloss.definitions(),
+             'allkwds': allkwds,
+             'n': n,
+             'total': total,
+             'matches': list(range(1, total+1)),
+             'navigation': nav,
+             'thumbnails': thumbnails,
+             'dialect_image': map_image_for_regions(gloss.region_set),
+             'regions': regions,
+             'regional_template_content': regional_template_content,
+             # lastmatch is a construction of the url for this word
+             # view that we use to pass to gloss pages
+             # could do with being a fn call to generate this name here and elsewhere
+             'lastmatch': str(trans.translation)+"-"+str(n),
+             'videofile': videourl,
+             'update_form': update_form,
+             'videoform': video_form,
+             'gloss': gloss,
+             'glosscount': glosscount,
+             'glossposn': glossposn,
+             'feedback' : True,
+             'feedbackmessage': feedbackmessage,
+             'tagform': TagUpdateForm(),
+             'SIGN_NAVIGATION' : settings.SIGN_NAVIGATION,
+             'SETTINGS_SHOW_TRADITIONAL' : settings.SHOW_TRADITIONAL,
+             'SETTINGS_SHOW_FREQUENCY' : settings.SHOW_FREQUENCY,
+             'DEFINITION_FIELDS' : settings.DEFINITION_FIELDS,
+             }
 
     return render(request, "dictionary/word.html", context)
 
@@ -273,7 +257,6 @@ def word(request, keyword, n):
 def gloss(request, idgloss):
     """View of a gloss - mimics the word view, really for admin use
        when we want to preview a particular gloss"""
-
 
     if 'feedbackmessage' in request.GET:
         feedbackmessage = request.GET['feedbackmessage']
@@ -293,6 +276,7 @@ def gloss(request, idgloss):
         raise Http404
 
     gloss = glosses[0]
+    (glossposn, glosscount) = get_gloss_position(gloss, can_view_not_inWeb)
 
     # and all the keywords associated with this sign
     allkwds = gloss.translation_set.all()
@@ -304,26 +288,6 @@ def gloss(request, idgloss):
     videourl = gloss.get_video_url()
     if not os.path.exists(os.path.join(settings.MEDIA_ROOT, videourl)):
         videourl = None
-
-    (glossposn, glosscount) = get_gloss_position(gloss, can_view_not_inWeb)
-
-    thumbnails = None
-    variant_relations = list(Relation.objects.filter(source=gloss,
-                                             role__role__exact="variant").all())
-    variants = []
-    if request.user.has_perm('dictionary.search_gloss'):
-        variants = [relation.target for relation in variant_relations]
-    else:
-        variants = [relation.target for relation in variant_relations if relation.target.inWeb == True]
-    if len(variants) > 0:
-        thumbnails = []
-        for variant in variants:
-            thumbnail = {}
-            thumbnail['pk'] = variant.pk
-            thumbnail['idgloss'] = variant.idgloss
-            thumbnails.append(thumbnail)
-
-
 
     # navigation gives us the next and previous signs
     nav = gloss.navigation(request.user.has_perm('dictionary.search_gloss'))
@@ -339,8 +303,6 @@ def gloss(request, idgloss):
     else:
         update_form = None
         video_form = None
-
-
 
     # get the last match keyword if there is one passed along as a form variable
     if 'lastmatch' in request.GET:
@@ -361,7 +323,6 @@ def gloss(request, idgloss):
     return render(request, "dictionary/word.html",
                               {'translation': trans,
                                'definitions': gloss.definitions(),
-                               'thumbnails': thumbnails,
                                'allkwds': allkwds,
                                'dialect_image': map_image_for_regions(gloss.region_set),
                                'regions': regions,

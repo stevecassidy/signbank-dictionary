@@ -138,6 +138,19 @@ class Definition(models.Model):
         list_filter = ['role']
         search_fields = ['gloss__idgloss']
 
+
+    def video(self):
+        """Return the video object for this definition or None if no video available"""
+
+        try:
+            return TaggedVideo.objects.get(category="Definition", tag=self.pk)
+        except:
+            return None
+
+
+
+
+
 class Language(models.Model):
     """A sign language name"""
 

@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.template import Context, RequestContext, loader
 from django.http import Http404
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required
@@ -442,10 +442,9 @@ def add_tag(request, glossid):
                 # we need to wrap the tag name in quotes since it might contain spaces
                 Tag.objects.add_tag(thisgloss, '"%s"' % tag)
                 # response is new HTML for the tag list and form
-                response = render(request, 'dictionary/glosstags.html',
+                response = render(request, 'dictionary/mod_glosstags.html',
                                               {'gloss': thisgloss,
                                                'tagform': TagUpdateForm(),
-                                               },
-                                              context_instance=RequestContext(request))
+                                               })
 
     return response

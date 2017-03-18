@@ -11,7 +11,7 @@
                  <span class='tagname'>{{tag}}</span>
                  {% if perms.dictionary.change_gloss %}
                  <span class='tagcount'>
-                     <a class='tagdelete editform'
+                     <a class='tagdelete editable'
                         id='{{tag.name}}'
                         href="{% url 'dictionary:add_tag'  glossid=gloss.id %}"
                         title='delete this tag'>x</a>
@@ -24,7 +24,7 @@
       {% endif %}
       {% if perms.dictionary.change_gloss %}
       <div id="tagcontainer"></div>
-      <div class='editform'>
+      <div class='editable'>
           <form id='tagaddform'
                 action="{% url 'dictionary:add_tag' glossid=gloss.id %}"
                 method="post" enctype="multipart/form-data">

@@ -44,6 +44,15 @@
     </script>
     <script type='text/javascript' src="{% static 'js/gloss_edit.js' %}"></script>
 
+    <script>
+    $('#defnUploadModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var definitionid = button.data('definitionid');
+      var modal = $(this);
+      modal.find('.modal-title').text('Upload Video Definition for ' + definitionid);
+      modal.find('#id_tag').val(definitionid);
+    })
+    </script>
 
     {% endif %}
 {% endblock %}
@@ -80,7 +89,7 @@
 
     <div class='pull-right'>
          <span id='edit_message'></span>&nbsp;
-         <button id='delete_gloss_btn' class='btn btn-default navbar-btn' data-toggle='modal' data-target='#delete_gloss_modal'>Delete Sign</button>
+         <button id='delete_gloss_btn' class='btn btn-danger navbar-btn editable' data-toggle='modal' data-target='#delete_gloss_modal'>Delete Sign</button>
          <button id='enable_edit' class='btn btn-default navbar-btn'>Enable Edit</button>
 
          <div class="modal fade" id="delete_gloss_modal" tabindex="-1" role="dialog" aria-labelledby="#modalTitle" aria-hidden="true">
@@ -132,144 +141,19 @@
         </ul>
     </div>
 
-
-
     {% if perms.dictionary.change_gloss and perms.dictionary.update_video %}
-    <div class='editform'>
-        <fieldset>
-            <legend>Upload New Video</legend>
-            <p>We have {{gloss.count_videos}} videos for this sign.</p>
-            <form action="{% url 'video:upload' %}" method="post" enctype="multipart/form-data" id="video_upload_form">
-              {% csrf_token %}
-              <input type='hidden' name='redirect' value='{{request.path}}?edit'>
-            <table id="staffops">
-              <tr>
-                  <td>{{videoform.videofile}}</td>
-              </tr>
-              <tr>
-                  <td><input type='hidden' name='category' value='Gloss'>
-                      <input type='hidden' name='tag' value='{{gloss.id}}'>
-                      <input class='btn btn-primary' type='submit' value='Upload Video'/></td>
-              </tr>
-            </table>
-            </form>
-        </fieldset>
-
-        {% if perms.dictionary.update_video and gloss.count_videos > 0 %}
-        <fieldset>
-         <legend>Delete/Revert Video</legend>
-            <table>
-            <form action="{% url 'video:delete' category='Gloss' tag=gloss.id %}" method='post'>
-            <tr><td><em>This will delete the most recent upload and restore the most recent earlier version.</em></td></tr>
-            <tr><td>{% csrf_token %}<input class='btn btn-danger' id='delete_video' type='submit' value='Delete/Revert this video'></td></tr>
-            </form>
-           </table>
-        </fieldset>
-        {% endif %}
-    </div>
+        {% include "dictionary/video-edit-form.html" %}
     {% endif %}
 
+    {% include "dictionary/mod_glosstags.html" %}
 
-    {% include "dictionary/glosstags.html" %}
-
-
-    {% if perms.feedback.view_interpreterfeedback %}
-    <div id='interpfeedback'>
-        <h3>Interpreter Notes</h3>
-        {% if perms.feedback.delete_interpreterfeedback %}
-        <p data-toggle='modal'
-              data-target='#delete_intnote_modal'>
-               <span class='glyphicon glyphicon-trash note_delete'
-              ></span>&nbsp;Delete All Interpreter Notes</p>
-
-         <div class="modal fade" id="delete_intnote_modal"
-              role="dialog" aria-labelledby="#modalTitle" aria-hidden="true">
-             <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class='modal-header'>
-                        <h2 id='modalTitle'>Delete All Interpreter Notes</h2>
-                    </div>
-                    <div class='modal-body'>
-                        <p>This action will delete all interpreter notes on this sign. It cannot be undone.</p>
-                     </div>
-                  <form action='{% url "feedback:intnote" gloss.id %}' method='post'>
-                      {% csrf_token %}
-                      <input type='hidden' name='action' value='delete_all'>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <input type="submit" class="btn btn-primary" value='Confirm Delete'>
-                      </div>
-                  </form>
-
-                </div>
-              </div>
-         </div>
-         {% endif %}
-
-        {% if perms.feedback.add_interpreterfeedback %}
-        <form action="{% url 'feedback:intnote' gloss.pk %}" method='post'>
-            {% csrf_token %}
-            {% bootstrap_field interpform.comment show_label=False %}
-            {% buttons %}
-                <button type="submit" class="btn btn-primary">
-                     Submit
-                </button>
-            {% endbuttons %}
-        </form>
-        {% endif %}
-
-        <table class='table'>
-        {% for fb in interpreterfeedback %}
-            <tr><th>{{fb.user.first_name}} {{fb.user.last_name}}</th>
-                <th>{{fb.date}}</th>
-                <td>
-                    {% if perms.feedback.delete_interpreterfeedback %}
-                    <span class='glyphicon glyphicon-trash note_delete'
-                          data-toggle='modal'
-                          data-target='#delete_intnote_modal_{{fb.id}}'></span>
-
-                     <div class="modal fade" id="delete_intnote_modal_{{fb.id}}"
-                          role="dialog" aria-labelledby="#modalTitle" aria-hidden="true">
-                         <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                                <div class='modal-header'>
-                                    <h2 id='modalTitle'>Delete This Note</h2>
-                                </div>
-                                <div class='modal-body'>
-                                    <p><strong>{{fb.user.first_name}} {{fb.user.last_name}}</strong></p>
-                                    <p>{{fb.comment}}</p>
-                                    <p>This action will delete this note. It cannot be undone.</p>
-                                 </div>
-                              <form action='{% url "feedback:intnote" gloss.id %}' method='post'>
-                                  {% csrf_token %}
-                                  <input type='hidden' name='action' value='delete'>
-                                  <input type='hidden' name='id' value='{{fb.id}}'>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                    <input type="submit" class="btn btn-primary" value='Confirm Delete'>
-                                  </div>
-                              </form>
-
-                            </div>
-                          </div>
-                     </div>
-                     {% endif %}
-                </td>
-            </tr>
-            <tr><td colspan=3>{{fb.comment}}</td></tr>
-        {% endfor %}
-        </table>
-
+    {% include "dictionary/mod_interpreterfeedback.html" %}
 
     </div>
-    {% endif %}
 
 </div>
 
     <div class='panel-group' id="definition">
-
-
-
         <table class='table table-condensed'>
             <tr><th>Sign Number:</th><td class='edit edit_int' id='sn'>{% value gloss.sn %}</td></tr>
             <tr><th>ID Gloss:</th><td class='edit edit_text' id='idgloss'>{% value gloss.idgloss %}</td></tr>
@@ -351,7 +235,7 @@
         {% endif %}
 
         {% if perms.dictionary.change_gloss %}
-        <form id='add_region_form' method='post' action='{% url 'dictionary:add_region' gloss.id %}'>
+        <form class='editable' id='add_region_form' method='post' action='{% url 'dictionary:add_region' gloss.id %}'>
             {% csrf_token %}
             <input type='hidden' name='sourceid' value='{{gloss.pk}}'>
             <table class='table table-condensed'>
@@ -444,7 +328,7 @@
                    {% for rel in gloss.relation_sources.all %}
                     <tr>
                          <td>
-                            <span class='glyphicon glyphicon-trash relation_delete' data-toggle='modal' data-target='#delete_relation_modal_{{rel.id}}'></span>
+                            <span class='glyphicon glyphicon-trash editable' data-toggle='modal' data-target='#delete_relation_modal_{{rel.id}}'></span>
 
                              <div class="modal fade" id="delete_relation_modal_{{rel.id}}" role="dialog" aria-labelledby="#modalTitle" aria-hidden="true">
                                  <div class="modal-dialog modal-sm">
@@ -518,7 +402,7 @@
                </table>
 
                {% if perms.dictionary.change_gloss %}
-               <form id='add_relation_form' method='post' action='{% url 'dictionary:add_relation' %}'>
+               <form class='editable' id='add_relation_form' method='post' action='{% url 'dictionary:add_relation' %}'>
                    {% csrf_token %}
                    <input type='hidden' name='sourceid' value='{{gloss.pk}}'>
                    <table class='table table-condensed'>
@@ -537,8 +421,6 @@
         </div>
     </div>
     {% endif %}
-
-
 
     <div class="panel panel-default">
         <div class='panel-heading'>
@@ -564,10 +446,9 @@
       {% if def.published or perms.dictionary.can_view_unpub_defs %}
       <tr>
         <td>
-
             {% if perms.dictionary.change_gloss %}
             {% if not def.published and perms.dictionary.can_delete_unpublished or def.published and perms.dictionary.can_delete_published %}
-            <span class='glyphicon glyphicon-trash definition_delete' data-toggle='modal' data-target='#delete_definition_modal_{{def.id}}'></span>
+            <span class='glyphicon glyphicon-trash editable' data-toggle='modal' data-target='#delete_definition_modal_{{def.id}}'></span>
 
              <div class="modal fade" id="delete_definition_modal_{{def.id}}" role="dialog" aria-labelledby="#modalTitle" aria-hidden="true">
                  <div class="modal-dialog modal-sm">
@@ -592,24 +473,33 @@
                     </div>
                   </div>
              </div>
+
             {% endif %}
-            {% endif %}
+        {% endif %}
         </td>
         <td {% if perms.dictionary.can_publish %}class='edit edit_check'{% endif %} id='definitionpub_{{def.id}}'>{% if def.published %}Yes{% else %}No{% endif %}</td>
         <td class='edit edit_int' id='definitioncount_{{def.id}}'>{{def.count}}</td>
         <td class='edit edit_role' id='definitionrole_{{def.id}}'>{{def.get_role_display}}</td>
         <td class='edit edit_area' id='definition_{{def.id}}'>{{def.text}}</td>
+        <td>
+            {% if def.video %}
+                {% videoplayer elementid=foo category='Definition' tag=def.id height=100 width=120 %}
+            {% endif %}
+        </td>
+        <td class='edit' id='definitionvideo_{{def.id}}'>
+        <button type="button" class="btn btn-primary editable"
+                data-toggle="modal" data-target="#defnUploadModal"
+                data-definitionid="{{def.id}}">Upload Video</button>
+        </td>
       </tr>
       {% endif %}
       {% endfor %}
-
-
     {% endfor %}
     </table>
-
+    {% upload_modal id='defnUploadModal' category='Definition' tag=0 redirect=request.get_full_path %}
 
     {% if perms.dictionary.change_gloss %}
-    <form id='add_definition' action='{% url 'dictionary:add_definition' gloss.id %}' method="POST">
+    <form class='editable' id='add_definition' action='{% url 'dictionary:add_definition' gloss.id %}' method="POST">
         <fieldset>
         {% csrf_token %}
          <table class='table'>

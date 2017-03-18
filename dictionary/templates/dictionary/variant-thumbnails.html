@@ -1,0 +1,36 @@
+{% load videotags %}
+
+<script type="text/javascript">
+    function replay(id) {
+            videojs.getPlayers()[id].play();
+    }
+
+    function load(idgloss){
+        $( "#variant-container" ).load( "{% url 'root_page' %}dictionary/variant/" + idgloss + ".html" );
+    }
+</script>
+    <p><strong>Found {{thumbnails|length}} variant{% if thumbnails|length|add:"0" > 1 %}s{% endif %} for this sign (click on video to enlarge):</strong></p>
+    <div id='thumbnailscontainer' class='jcarousel-wrapper'>
+        <div id='thumbnailsrow' class='jcarousel' data-jcarousel="true">
+            <ul style="left: 0px; top: 0px;">
+                {% for thumbnail in thumbnails %}
+                    <li>
+                        <div class='col-lg-3 col-md-4 col-xs-6 thumb'>
+                            <a class='thumbnail popup-with-zoom-anim' target='mainvideo'
+                                href="#small-dialog" onclick='load("{{thumbnail.idgloss}}")'>
+             					   {% videoplayer elementid=thumbnail.idgloss category='Gloss' tag=thumbnail.pk width=120 height=100 %}
+                                <span class="thumbnailcover"
+                                        onmouseover='replay("{{thumbnail.idgloss}}")'>
+                                </span>
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+                <div id='variant-container'></div>
+            </div>
+        </div>
+        <a href="#" class="jcarousel-control-prev inactive" data-jcarouselcontrol="true">‹  </a>
+        <a href="#" class="jcarousel-control-next" data-jcarouselcontrol="true">  ›</a>
+    </div>

@@ -1,0 +1,32 @@
+<div class='editable'>
+    <fieldset>
+        <legend>Upload New Video</legend>
+        <p>We have {{gloss.count_videos}} videos for this sign.</p>
+        <form action="{% url 'video:upload' %}" method="post" enctype="multipart/form-data" id="video_upload_form">
+          {% csrf_token %}
+          <input type='hidden' name='redirect' value='{{request.path}}?edit'>
+        <table id="staffops">
+          <tr>
+              <td>{{videoform.videofile}}</td>
+          </tr>
+          <tr>
+              <td><input type='hidden' name='category' value='Gloss'>
+                  <input type='hidden' name='tag' value='{{gloss.id}}'>
+                  <input class='btn btn-primary' type='submit' value='Upload Video'/></td>
+          </tr>
+        </table>
+        </form>
+    </fieldset>
+
+    {% if perms.dictionary.update_video and gloss.count_videos > 0 %}
+    <fieldset>
+     <legend>Delete/Revert Video</legend>
+        <table>
+        <form action="{% url 'video:delete' category='Gloss' tag=gloss.id %}" method='post'>
+        <tr><td><em>This will delete the most recent upload and restore the most recent earlier version.</em></td></tr>
+        <tr><td>{% csrf_token %}<input class='btn btn-danger' id='delete_video' type='submit' value='Delete/Revert this video'></td></tr>
+        </form>
+       </table>
+    </fieldset>
+    {% endif %}
+</div>
