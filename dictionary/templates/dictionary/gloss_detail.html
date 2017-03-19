@@ -124,7 +124,7 @@
     <div id="leftblock">
     <div id="videocontainer">
         <div id="player">
-            {% videoplayer elementid='signvideo' category='Gloss' tag=gloss.pk width=308 height=270 %}
+            {% videoplayer id='signvideo' category='Gloss' tag=gloss.pk width=308 height=270 %}
         </div>
     </div>
 
@@ -483,7 +483,7 @@
         <td class='edit edit_area' id='definition_{{def.id}}'>{{def.text}}</td>
         <td>
             {% if def.video %}
-                {% videoplayer elementid=foo category='Definition' tag=def.id height=100 width=120 %}
+                {% videoplayer id=foo category='Definition' tag=def.id height=100 width=120 %}
             {% endif %}
         </td>
         <td class='edit' id='definitionvideo_{{def.id}}'>

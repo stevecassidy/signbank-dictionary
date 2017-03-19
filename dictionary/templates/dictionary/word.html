@@ -137,7 +137,7 @@
 	        <div class='col-md-4'>
 	            <div id="videocontainer">
 	               <div id="player">
-					   {% videoplayer elementid='signvideo' category='Gloss' tag=gloss.pk width=308 height=250 %}
+					   {% videoplayer id='signvideo' category='Gloss' tag=gloss.pk width=308 height=250 %}
 	               </div>
 	            </div>
 
@@ -169,15 +169,16 @@
 
 	                          <h3>{{role.list.0.get_role_display}}</h3>
 
-	                          <ol>
 	                          {% for def in role.list %}
-	                            <li>{{def.text}}
+							    <div class="definition">
 									{% if def.video %}
-										{% videoplayer elementid=foo category='Definition' tag=def.id height=100 width=120 %}
+										{% thumbnail_popup id=def.video.tag category='Definition' tag=def.id width=600 height=400 %}
 									{% endif %}
-								</li>
+								  <div class="definitiontext">
+								    <p>{{def.text}}</p>
+								  </div>
+								</div>
 	                          {% endfor %}
-	                          </ol>
 
 	                      {% endifequal %}
 	                 {% endfor %}
