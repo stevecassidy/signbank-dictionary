@@ -1,5 +1,5 @@
-django>=1.9.6
-django-bootstrap3==8.1.0
-
-# Additional requirements go here
+django==1.10
+django-bootstrap3==8.2.2
 django-tagging
+git+https://github.com/signbank/Signbank-video.git@master
+git+https://github.com/stevecassidy/signbank-feedback.git@master
