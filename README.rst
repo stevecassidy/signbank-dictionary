@@ -5,11 +5,11 @@ signbank-dictionary
 .. image:: https://badge.fury.io/py/signbank-dictionary.png
     :target: https://badge.fury.io/py/signbank-dictionary
 
-.. image:: https://travis-ci.org/hujosh/signbank-dictionary.png?branch=master
-    :target: https://travis-ci.org/hujosh/signbank-dictionary
-    
-.. image:: https://codecov.io/gh/hujosh/signbank-dictionary/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/hujosh/signbank-dictionary
+.. image:: https://travis-ci.org/stevecassidy/signbank-dictionary.png?branch=master
+    :target: https://travis-ci.org/stevecassidy/signbank-dictionary
+
+.. image:: https://codecov.io/gh/stevecassidy/signbank-dictionary/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/stevecassidy/signbank-dictionary
 
 The dictionary component of Signbank
 
@@ -28,7 +28,7 @@ Install signbank-dictionary::
 Then use it in a project::
 
     import dictionary
-    
+
 You must define the following variables in ``settings.py``:
 
 * ::
@@ -38,7 +38,7 @@ You must define the following variables in ``settings.py``:
 
     DEFINITION_ROLE_CHOICES = (('general', 'General Definition'),
     ('noun', 'As a Noun'),
-    ('verb', 'As a Verb or Adjective'), 
+    ('verb', 'As a Verb or Adjective'),
     ('deictic', 'As a Pointing Sign'),
     ('interact', 'Interactive'),
     ('modifier', 'As Modifier'),
@@ -51,7 +51,7 @@ You must define the following variables in ``settings.py``:
     )
 
 Those two variables configure how the definitions of signs are displayed in
-the dictionary. 
+the dictionary.
 
 * ``ANON_TAG_SEARCH = True``
 * ``ANON_SAFE_SEARCH = False``
@@ -75,14 +75,14 @@ This variable specifies the sign language of the site.
 * ``SIGN_NAVIGATION = True``
 This variable specifies whether a navigation bar
 in the dictionary is displayed. The navigation bar
-allows a user to go from the sign whose entry he is currently 
+allows a user to go from the sign whose entry he is currently
 looking at to the next, or previous, sign in the sequence of signs.
 
 
 * ``FORCE_LOWERCASE_TAGS = True``
 * ::
 
-    ALLOWED_TAGS = [ '', 
+    ALLOWED_TAGS = [ '',
                  'b92:directional',
                  'b92:regional',
                  'corpus:attested',
@@ -183,8 +183,8 @@ looking at to the next, or previous, sign in the sequence of signs.
 These two variables are used by the ``tagging`` app.
 The ``tagging`` app is just a way of assigning categories to
 signs.
-                 
-                
+
+
 You must also add ``dictionary``, and ``tagging`` to your ``INSTALLED_APPS`` variable.
 
 
