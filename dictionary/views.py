@@ -367,17 +367,24 @@ def remove_crude_words(words):
 
 
 def remove_words_not_belonging_to_category(words, category):
-    tag = Tag.objects.get(name=category)
+    tags = Tag.objects.filter(name=category)
+    if tags.count() == 0:
+        return []
+
+    # should be just one tag
+    tag = tags[0]
+
     result = []
     for w in words:
         trans = w.translation_set.all()
         glosses = [t.gloss for t in trans]
         for g in glosses:
             if tag in g.tags:
-                result.append(w)
+                if w not in result:
+                    result.append(w)
     words = result
-    return words
 
+    return words
 
 
 @login_required_config
@@ -387,6 +394,7 @@ def search(request):
     form = UserSignSearchForm(request.GET.copy())
 
     if form.is_valid():
+
         # need to transcode the query to our encoding
         term = form.cleaned_data['query']
         category = form.cleaned_data['category']
@@ -402,40 +410,57 @@ def search(request):
             # and it won't match anything in the dictionary
             words = []
 
-        if request.user.has_perm('dictionary.search_gloss'):
-            # staff get to see all the words that have at least one translation
-            words = Keyword.objects.filter(text__istartswith=term, translation__isnull=False).distinct()
-        else:
-            # regular users see either everything that's published
-            words = Keyword.objects.filter(text__istartswith=term,
-                                            translation__gloss__inWeb__exact=True).distinct()
 
-        try:
-            crudetag = Tag.objects.get(name='lexis:crude')
-        except:
-            crudetag = None
+        if category in ['all', '']:
+
+            if request.user.has_perm('dictionary.search_gloss'):
+                # staff get to see all the words that have at least one translation
+                words = Keyword.objects.filter(text__istartswith=term, translation__isnull=False).distinct()
+            else:
+                # regular users see either everything that's published
+                words = Keyword.objects.filter(text__istartswith=term,
+                                                translation__gloss__inWeb__exact=True).distinct()
+        else:
+            # might fail if category doesn't exist
+            tag = Tag.objects.get(name=category)
+            glosses = TaggedItem.objects.get_by_model(Gloss, tag)
+            if request.user.has_perm('dictionary.search_gloss'):
+                glosses = glosses.filter(translation__translation__text__istartswith=term)
+            else:
+                glosses = glosses.filter(translation__translation__text__istartswith=term,
+                                         inWeb__exact=True)
+
+            # get the keyword list that these
+            # NOTE: these may now include keywords not starting with our term
+            translations = glosses.values('translation__translation').order_by()
+            words = []
+            for tr in translations:
+                kw = Keyword.objects.get(id=tr['translation__translation'])
+                if not kw in words:
+                    words.append(kw)
 
         if safe:
             words = remove_crude_words(words)
-        if not category in ['all', '']:
-            words = remove_words_not_belonging_to_category(words, category)
+
     else:
         term = ''
+        category = 'all'
         words = []
-
 
     # display the keyword page if there's only one hit and it is an exact match
     if len(words) == 1 and words[0].text == term:
         return HttpResponseRedirect('/dictionary/words/'+words[0].text+'-1.html' )
 
-    (result_page, paginator) = paginate(request, words, 50)
+    (result_page, paginator) = paginate(request, words, 49)
 
     return render(request, "dictionary/search_result.html",
                               {'query' : term,
                                'form': form,
                                'paginator' : paginator,
                                'wordcount' : len(words),
+                               'category' : category,
                                'page' : result_page,
+                               'FILTER_TAGS': settings.DICTIONARY_FILTER_TAGS,
                                'ANON_SAFE_SEARCH': settings.ANON_SAFE_SEARCH,
                                'ANON_TAG_SEARCH': settings.ANON_TAG_SEARCH,
                                'language': settings.LANGUAGE_NAME,

@@ -1,42 +1,69 @@
 {% extends "baselayout.html" %}
 {% load static %}
 
+{% block extrajs %}
+<script>
+$(document).ready(function() {
+    $('.checkbox input').on('change', function() {
+        $(this).closest('form').submit();
+    });
+});
+</script>
+{% endblock %}
+
 {% block content %}
 
+    <div class='row'>
+        <div class='col-md-3'>
+          <div class="panel">
+              <div class="panel-body">
+                  <form role="search" id="mainSearch" name="mainSearch" method="get" action="{% url 'dictionary:search' %}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="keywords" name="query" value="{{ query }}" >
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
 
-    <p>Welcome to the Sign Search section of the {{language}} SignBank. Here
-     you can search for a sign using an English keyword in the search box
-     above, or browse keywords starting with any letter below.</p>
+                    <span id="helpBlock" class="help-block">Enter English word or first few letters</span>
 
-    <div class="searchblock">
-      <p>Enter English word or first few letters:</p>
+                    <h4>Category</h4>
 
-      <form role="search" id="mainSearch" name="mainSearch" method="get" action="{% url 'dictionary:search' %}">
-         <div class="form-group">
-            <input class='form-control' placeholder='Enter keywords' type="Text" name="query" value="{{ query }}" maxlength="50">
-            <button type="submit" class="btn btn-default">Sign Search</button>
-         </div>
+                    {% for tag in FILTER_TAGS %}
+                    <div class='checkbox'>
+                        <label>
+                            <input type='radio' {% ifequal tag.0 category %}checked{% endifequal %} name='category' value='{{tag.0}}'>
+                            {{tag.1}}
+                        </label>
+                    </div>
+                    {% endfor %}
+                  </form>
 
-      </form>
-    </div>
+                  <hr>
+                  <p>Search for a sign using an English keyword in the search box
+                   or browse keywords starting with any letter.  Limit search
+               to a category of signs by selecting from the list of topics above.</p>
 
-    <div class="alphablock">
-      <p>Or search alphabetically:</p>
 
-      <p>
-        {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
-          <a href="{% url 'dictionary:search' %}?query={{letter}}"> {{letter}} </a> |
-        {% endfor %}
-      </p>
-    </div>
+              </div>
+          </div>
+        </div>
 
-    {% if ANON_TAG_SEARCH %}
-    <form class='form-inline' action="{% url 'dictionary:search' %}">
-        <div class='form-group'><label for='query'>{{form.query.label}}</label> {{form.query}}</div>
-        <div class='form-group'><label for='category'>{{form.category.label}}</label> {{form.category}}</div>
-        <div class='form-group'><input type='submit' class='btn btn-primary' value='Submit'></div>
-     </form>
-    {% endif %}
+        <div class='col-md-9'>
+
+
+            <div class="alphablock">
+                <nav aria-label="Alphabetic navigation">
+                    <ul class="pagination">
+                    {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+                      <li{% ifequal query letter %} class='active'{% endifequal %}>
+                      <a href="{% url 'dictionary:search' %}?query={{letter}}&category={{category}}"> {{letter}} </a></li>
+                    {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+
+
 
 
         {% ifequal wordcount 0 %}
@@ -72,10 +99,7 @@
             matching words/signs if they exist in {{language}}.</li>
             {% endif %}
         </ul>
-
             {% endif %}
-
-
         {% else %}
          {% ifequal wordcount 1 %}
             <p>{{ wordcount }} full or partial match found</p>
@@ -90,38 +114,40 @@
         appear in a regular (public) search.</p>
         {% endif %}
 
-      <div id="searchresults">
-         <table width="90%">
-            <tr>
-               <td valign="top">
-          {% for word in page.object_list %}
-            <p>
-              <a href="{% url 'dictionary:word' word.text 1 %}">{{ word.text }}</a>
-              {% if not word.inWeb %}*{% endif %}
-            </p>
+        <div class="table-responsive">
+         <table class='table'>
+             <tbody>
+                <tr>
+                   <td valign="top">
+                       {% for word in page.object_list %}
+                        <p>
+                          <a href="{% url 'dictionary:word' word.text 1 %}">{{ word.text }}</a>
+                          {% if not word.inWeb %}*{% endif %}
+                        </p>
 
-            {% if forloop.counter|divisibleby:"10" %}
-            </td>
-            <td valign="top">
-            {% endif %}
+                        {% if forloop.counter|divisibleby:"10" %}
+                        </td>
+                        <td valign="top">
+                        {% endif %}
 
-          {% endfor %}
-           </td>
-          </tr>
+                      {% endfor %}
+                  </td>
+              </tr>
+           </tbody>
          </table>
        </div>
 
-          {% if page.has_next or page.has_previous %}
-          <p>Jump to results page:
-          {% for p in paginator.page_range %}
-             {% ifequal p page.number %}
-             <strong>{% ifequal p 0 %}Start{% else %}{{p}}{% endifequal %}</strong>
-             {% else %}
-             <a href='?query={{query}}&page={{p}}'>{% ifequal p 0 %}Start{% else %}{{p}}{% endifequal %}</a>
-             {% endifequal %}
-          {% endfor %}
-          </p>
-
-          {% endif %}
+       {% if page.has_next or page.has_previous %}
+       <nav aria-label="Page navigation">
+         <ul class="pagination">
+             <li class='disabled'><a href='#'>Results Page:</a></li>
+           {% for p in paginator.page_range %}
+              <li {% ifequal p page.number %}class='active'{% endifequal %}><a href='?query={{query}}&page={{p}}{% if category %}&category={{category}}{% endif %}'>{% ifequal p 0 %}Start{% else %}{{p}}{% endifequal %}</a></li>
+           {% endfor %}
+         </ul>
+       </nav>
+       {% endif %}
+   </div>
+</div>
 
 {% endblock %}

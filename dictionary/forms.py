@@ -4,10 +4,8 @@ from .models import Dialect, Gloss, Definition, Relation, Region, defn_role_choi
 from django.conf import settings
 from tagging.models import Tag
 
-# category choices are tag values that we'll restrict search to
-CATEGORY_CHOICES = (('all', 'All Signs'),
-                    ('semantic:health', 'Only Health Related Signs'),
-                    ('semantic:education', 'Only Education Related Signs'))
+CATEGORY_CHOICES = settings.DICTIONARY_FILTER_TAGS
+CATEGORY_CHOICES.insert(0, ('all', 'All'))
 
 class UserSignSearchForm(forms.Form):
 
