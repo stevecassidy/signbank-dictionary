@@ -281,7 +281,7 @@ class GlossDetailView(DetailView):
         context['relationform'] = RelationForm()
         context['navigation'] = context['gloss'].navigation(True)
         context['interpform'] = InterpreterFeedbackForm()
-        context['interpreterfeedback'] = InterpreterFeedback.objects.filter(glossid__exact=context['gloss'].id)
+        context['interpreterfeedback'] = InterpreterFeedback.objects.filter(gloss_id__exact=context['gloss'].id)
         context['SIGN_NAVIGATION']  = settings.SIGN_NAVIGATION
         if settings.SIGN_NAVIGATION:
             context['glosscount'] = Gloss.objects.count()
