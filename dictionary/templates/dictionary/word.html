@@ -169,8 +169,9 @@
 
 	                          <h3>{{role.list.0.get_role_display}}</h3>
 
+							  <ol>
 	                          {% for def in role.list %}
-							    <div class="definition">
+							    <li><div class="definition">
 									{% if def.video %}
 										{% thumbnail_popup id=def.video.tag category='Definition' tag=def.id width=600 height=400 %}
 									{% endif %}
@@ -178,8 +179,9 @@
 								    <p>{{def.text}}</p>
 								  </div>
 								</div>
+							</li>
 	                          {% endfor %}
-
+						  </ol>
 	                      {% endifequal %}
 	                 {% endfor %}
 	            {% endfor %}
