@@ -2,35 +2,42 @@
 
 <script type="text/javascript">
     function replay(id) {
-            videojs.getPlayers()[id].play();
+        vid = videojs.getPlayers()[id];
+        if (typeof vid !== 'undefined') {
+            vid.play();
+        }
     }
 
-    function load(idgloss){
-        $( "#variant-container" ).load( "{% url 'root_page' %}dictionary/variant/" + idgloss + ".html" );
-    }
 </script>
     <p><strong>Found {{thumbnails|length}} variant{% if thumbnails|length|add:"0" > 1 %}s{% endif %} for this sign (click on video to enlarge):</strong></p>
+
     <div id='thumbnailscontainer' class='jcarousel-wrapper'>
         <div id='thumbnailsrow' class='jcarousel' data-jcarousel="true">
             <ul style="left: 0px; top: 0px;">
                 {% for thumbnail in thumbnails %}
                     <li>
-                        <div class='col-lg-3 col-md-4 col-xs-6 thumb'>
-                            <a class='thumbnail popup-with-zoom-anim' target='mainvideo'
-                                href="#small-dialog" onclick='load("{{thumbnail.idgloss}}")'>
-             					   {% videoplayer id=thumbnail.idgloss category='Gloss' tag=thumbnail.pk width=120 height=100 %}
-                                <span class="thumbnailcover"
-                                        onmouseover='replay("{{thumbnail.idgloss}}")'>
-                                </span>
-                            </a>
-                        </div>
+                        <a href="#" data-toggle="modal"
+                                    data-target="#variant-modal"
+                                    data-idgloss="{{thumbnail.idgloss}}">
+                            {% videoplayer id=thumbnail.idgloss category='Gloss' tag=thumbnail.pk width=120 height=100 %}
+                        </a>
                     </li>
                 {% endfor %}
             </ul>
-            <div id="small-dialog" class="zoom-anim-dialog mfp-hide">
-                <div id='variant-container'></div>
+        </div>
+        <div class="modal fade" id="variant-modal" tabindex="-1" role="dialog" aria-labelledby="variant-modalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  </div>
+                  <div class="modal-body">
+                    <div id='variant-container'></div>
+                  </div>
+                </div>
             </div>
         </div>
+
         <a href="#" class="jcarousel-control-prev inactive" data-jcarouselcontrol="true">‹  </a>
         <a href="#" class="jcarousel-control-next" data-jcarouselcontrol="true">  ›</a>
     </div>

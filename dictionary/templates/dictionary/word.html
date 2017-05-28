@@ -55,6 +55,17 @@
 		$( document ).ready(function() {
 			topmap();
 		});
+
+		$( document ).ready(function() {
+
+			$('#variant-modal').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget) // Button that triggered the modal
+			  var idgloss = button.data('idgloss') // Extract info from data-* attributes
+
+			  $( "#variant-container" ).load( "{% url 'root_page' %}dictionary/variant/" + idgloss + ".html" );
+
+			})
+		});
 	</script>
 
 {% endblock %}
@@ -173,8 +184,11 @@
 	                          {% for def in role.list %}
 							    <li><div class="definition">
 									{% if def.video %}
+									<div style='float:right; margin-left: 10px;'>
 										{% thumbnail_popup id=def.video.tag category='Definition' tag=def.id width=600 height=400 %}
+									</div>
 									{% endif %}
+
 								  <div class="definitiontext">
 								    <p>{{def.text}}</p>
 								  </div>
