@@ -4,7 +4,7 @@ from .models import Dialect, Gloss, Definition, Relation, Region, defn_role_choi
 from django.conf import settings
 from tagging.models import Tag
 
-CATEGORY_CHOICES = settings.DICTIONARY_FILTER_TAGS
+CATEGORY_CHOICES = getattr(settings, 'DICTIONARY_FILTER_TAGS', [])
 CATEGORY_CHOICES.insert(0, ('all', 'All'))
 
 class UserSignSearchForm(forms.Form):

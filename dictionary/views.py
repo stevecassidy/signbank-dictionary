@@ -26,7 +26,7 @@ def login_required_config(function):
     Like @login_required if the ALWAYS_REQUIRE_LOGIN setting is True.
     '''
     def wrapper(*args, **kwargs):
-        if settings.ALWAYS_REQUIRE_LOGIN:
+        if getattr(settings, 'ALWAYS_REQUIRE_LOGIN', False):
             decorated_function = login_required(function)
             return decorated_function(*args, **kwargs)
         else:
@@ -42,7 +42,7 @@ def index(request):
 
     return render(request, "dictionary/search_result.html",
                               {'form': UserSignSearchForm(),
-                               'language': settings.LANGUAGE_NAME,
+                               'language': getattr(settings, 'LANGUAGE_NAME', 'Auslan'),
                                'query': '',
                                })
 
@@ -460,10 +460,10 @@ def search(request):
                                'wordcount' : len(words),
                                'category' : category,
                                'page' : result_page,
-                               'FILTER_TAGS': settings.DICTIONARY_FILTER_TAGS,
-                               'ANON_SAFE_SEARCH': settings.ANON_SAFE_SEARCH,
-                               'ANON_TAG_SEARCH': settings.ANON_TAG_SEARCH,
-                               'language': settings.LANGUAGE_NAME,
+                               'FILTER_TAGS': getattr(settings, 'DICTIONARY_FILTER_TAGS', []),
+                               'ANON_SAFE_SEARCH': getattr(settings, 'ANON_SAFE_SEARCH', True),
+                               'ANON_TAG_SEARCH': getattr(settings, 'ANON_TAG_SEARCH', True),
+                               'language': getattr(settings, 'LANGUAGE_NAME', 'Auslan'),
                                })
 
 
