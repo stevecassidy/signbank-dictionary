@@ -62,9 +62,16 @@
 			  var button = $(event.relatedTarget) // Button that triggered the modal
 			  var idgloss = button.data('idgloss') // Extract info from data-* attributes
 
-			  $( "#variant-container" ).load( "{% url 'root_page' %}dictionary/variant/" + idgloss + ".html" );
-
-			})
+			  $( "#variant-container" ).load( "{% url 'root_page' %}dictionary/variant/" + idgloss + ".html",
+		  		function() {
+					// initialise video player instance
+					player = videojs('variantsignvideo', {}, function() {});
+				});
+			});
+			$('#variant-modal').on('hide.bs.modal', function(event) {
+				// remove the video player instance
+				player = videojs('variantsignvideo').dispose();
+			});
 		});
 	</script>
 
