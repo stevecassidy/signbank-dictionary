@@ -4,7 +4,7 @@
 {% block extrajs %}
 <script>
 $(document).ready(function() {
-    $('.checkbox input').on('change', function() {
+    $('#id_category').on('change', function() {
         $(this).closest('form').submit();
     });
 });
@@ -28,15 +28,7 @@ $(document).ready(function() {
                     <span id="helpBlock" class="help-block">Enter English word or first few letters</span>
 
                     <h4>Category</h4>
-
-                    {% for tag in FILTER_TAGS %}
-                    <div class='checkbox'>
-                        <label>
-                            <input type='radio' {% ifequal tag.0 category %}checked{% endifequal %} name='category' value='{{tag.0}}'>
-                            {{tag.1}}
-                        </label>
-                    </div>
-                    {% endfor %}
+                    {{searchform.category}}
                   </form>
 
                   <hr>
@@ -44,7 +36,11 @@ $(document).ready(function() {
                    or browse keywords starting with any letter.  Limit search
                to a category of signs by selecting from the list of topics above.</p>
 
-
+<!--
+               <form action="">
+                   {{regionform}}
+               </form>
+-->
               </div>
           </div>
         </div>

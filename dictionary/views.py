@@ -21,6 +21,15 @@ from .forms import *
 from video.forms import VideoUploadForm
 
 
+def dictionary_context_processor(request):
+    """Context Processor to inject search form into every page
+    on the site."""
+
+    return {'menusearchform': UserSignSearchForm(auto_id="id_menu_%s"),
+            'regionform': SetRegionForm(),
+            }
+
+
 def login_required_config(function):
     '''
     Like @login_required if the ALWAYS_REQUIRE_LOGIN setting is True.
@@ -32,21 +41,6 @@ def login_required_config(function):
         else:
             return function(*args, **kwargs)
     return wrapper
-
-
-@login_required_config
-def index(request):
-    """Default view showing a browse/search entry
-    point to the dictionary"""
-
-
-    return render(request, "dictionary/search_result.html",
-                              {'form': UserSignSearchForm(),
-                               'language': getattr(settings, 'LANGUAGE_NAME', 'Auslan'),
-                               'query': '',
-                               })
-
-
 
 def map_image_for_regions(regions):
     """Get the right map images for this region set
@@ -150,7 +144,6 @@ def variant(request, idgloss):
                                'DEFINITION_FIELDS' : settings.DEFINITION_FIELDS,
                                })
 
-
 def word(request, keyword, n):
     """View of a single keyword that may have more than one sign"""
 
@@ -251,8 +244,6 @@ def word(request, keyword, n):
 
     return render(request, "dictionary/word.html", context)
 
-
-
 @login_required_config
 def gloss(request, idgloss):
     """View of a gloss - mimics the word view, really for admin use
@@ -345,8 +336,6 @@ def gloss(request, idgloss):
                                'DEFINITION_FIELDS' : settings.DEFINITION_FIELDS,
                                })
 
-
-
 def remove_crude_words(words):
     try:
         crudetag = Tag.objects.get(name='lexis:crude')
@@ -364,7 +353,6 @@ def remove_crude_words(words):
                 result.append(w)
         words = result
     return words
-
 
 def remove_words_not_belonging_to_category(words, category):
     tags = Tag.objects.filter(name=category)
@@ -386,7 +374,6 @@ def remove_words_not_belonging_to_category(words, category):
 
     return words
 
-
 @login_required_config
 def search(request):
     """Handle keyword search form submission"""
@@ -399,48 +386,52 @@ def search(request):
         term = form.cleaned_data['query']
         category = form.cleaned_data['category']
 
-        # safe search for authenticated users if the setting says so
-        safe = (not request.user.is_authenticated()) and settings.ANON_SAFE_SEARCH
-
-        try:
-            term = smart_unicode(term)
-        except:
-            # if the encoding didn't work this is
-            # a strange unicode or other string
-            # and it won't match anything in the dictionary
+        if term == '' and category in ['', 'all']:
             words = []
-
-
-        if category in ['all', '']:
-
-            if request.user.has_perm('dictionary.search_gloss'):
-                # staff get to see all the words that have at least one translation
-                words = Keyword.objects.filter(text__istartswith=term, translation__isnull=False).distinct()
-            else:
-                # regular users see either everything that's published
-                words = Keyword.objects.filter(text__istartswith=term,
-                                                translation__gloss__inWeb__exact=True).distinct()
         else:
-            # might fail if category doesn't exist
-            tag = Tag.objects.get(name=category)
-            glosses = TaggedItem.objects.get_by_model(Gloss, tag)
-            if request.user.has_perm('dictionary.search_gloss'):
-                glosses = glosses.filter(translation__translation__text__istartswith=term)
+
+            # safe search for authenticated users if the setting says so
+            safe = (not request.user.is_authenticated()) and settings.ANON_SAFE_SEARCH
+
+            try:
+                term = smart_unicode(term)
+            except:
+                # if the encoding didn't work this is
+                # a strange unicode or other string
+                # and it won't match anything in the dictionary
+                words = []
+
+
+            if category in ['all', '']:
+
+                if request.user.has_perm('dictionary.search_gloss'):
+                    # staff get to see all the words that have at least one translation
+                    words = Keyword.objects.filter(text__istartswith=term, translation__isnull=False).distinct()
+                else:
+                    # regular users see either everything that's published
+                    words = Keyword.objects.filter(text__istartswith=term,
+                                                    translation__gloss__inWeb__exact=True).distinct()
             else:
-                glosses = glosses.filter(translation__translation__text__istartswith=term,
-                                         inWeb__exact=True)
+                # might fail if category doesn't exist
+                tag = Tag.objects.get(name=category)
+                glosses = TaggedItem.objects.get_by_model(Gloss, tag)
+                if request.user.has_perm('dictionary.search_gloss'):
+                    glosses = glosses.filter(translation__translation__text__istartswith=term)
+                else:
+                    glosses = glosses.filter(translation__translation__text__istartswith=term,
+                                             inWeb__exact=True)
 
-            # get the keyword list that these
-            # NOTE: these may now include keywords not starting with our term
-            translations = glosses.values('translation__translation').order_by()
-            words = []
-            for tr in translations:
-                kw = Keyword.objects.get(id=tr['translation__translation'])
-                if not kw in words:
-                    words.append(kw)
+                # get the keyword list that these
+                # NOTE: these may now include keywords not starting with our term
+                translations = glosses.values('translation__translation').order_by()
+                words = []
+                for tr in translations:
+                    kw = Keyword.objects.get(id=tr['translation__translation'])
+                    if not kw in words:
+                        words.append(kw)
 
-        if safe:
-            words = remove_crude_words(words)
+            if safe:
+                words = remove_crude_words(words)
 
     else:
         term = ''
@@ -455,7 +446,7 @@ def search(request):
 
     return render(request, "dictionary/search_result.html",
                               {'query' : term,
-                               'form': form,
+                               'searchform': form,
                                'paginator' : paginator,
                                'wordcount' : len(words),
                                'category' : category,
@@ -476,7 +467,6 @@ def keyword_value_list(request, prefix=None):
     kwds_list = [k.text for k in kwds]
     return HttpResponse("\n".join(kwds_list), content_type='text/plain')
 
-
 def missing_video_list():
     """A list of signs that don't have an
     associated video file"""
@@ -493,8 +483,6 @@ def missing_video_view(request):
 
     return render(request, "dictionary/missingvideo.html",
                               {'glosses': glosses})
-
-
 
 def paginate(request, objects, npages):
     # There might be many matches, so let's paginate them...
