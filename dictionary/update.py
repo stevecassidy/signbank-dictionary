@@ -403,11 +403,9 @@ def add_definition(request, glossid):
     thisgloss = get_object_or_404(Gloss, id=glossid)
 
     if request.method == "POST":
-        form = DefinitionForm(request.POST)
+        form = DefinitionForm(request.POST, request.FILES)
 
         if form.is_valid():
-
-
             count = form.cleaned_data['count']
             role = form.cleaned_data['role']
             text = form.cleaned_data['text']
@@ -415,6 +413,18 @@ def add_definition(request, glossid):
             # create definition, default to not published
             defn = Definition(gloss=thisgloss, count=count, role=role, text=text, published=False)
             defn.save()
+
+            print("VID:", form.cleaned_data['videofile'])
+            # check for a video upload, if present, attach to this definition
+            if form.cleaned_data['videofile']:
+                print("dealing with video")
+                vfile = form.cleaned_data['videofile']
+                tag = defn.id
+
+                vfile.name = "%s.mp4" % (tag,)
+
+                tagvid = TaggedVideo.objects.add('Definition', tag, vfile)
+
 
     return HttpResponseRedirect(reverse('dictionary:admin_gloss_view', kwargs={'pk': thisgloss.id})+'?editdef')
 

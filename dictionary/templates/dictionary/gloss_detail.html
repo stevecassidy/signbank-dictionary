@@ -483,7 +483,7 @@
         <td class='edit edit_area' id='definition_{{def.id}}'>{{def.text}}</td>
         <td>
             {% if def.video %}
-                {% videoplayer id=foo category='Definition' tag=def.id height=100 width=120 %}
+                {% videoplayer id=def.video.id category='Definition' tag=def.id height=100 width=120 %}
             {% endif %}
         </td>
         <td class='edit' id='definitionvideo_{{def.id}}'>
@@ -495,30 +495,55 @@
       {% endif %}
       {% endfor %}
     {% endfor %}
-    </table>
-    {% upload_modal id='defnUploadModal' category='Definition' tag=0 redirect=request.get_full_path %}
 
     {% if perms.dictionary.change_gloss %}
-    <form class='editable' id='add_definition' action='{% url 'dictionary:add_definition' gloss.id %}' method="POST">
-        <fieldset>
-        {% csrf_token %}
-         <table class='table'>
-            <tr>
-                <td style='width:5em'><input class='form-control' name='count' type='number'></td>
-                <td style='width:10em'>{{definitionform.role}}</td>
-                <td><input class='form-control' name='text' placeholder='Enter new definition/note'></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td><input class='btn' type='submit' value='Save New'></td>
-            </tr>
-         </table>
-    </fieldset>
-
+    <tr>
+        <th colspan=6>Add New Definition</th>
+    </tr>
+    <tr>
+        <th style='width:1em'></th>
+        <th style='width:3em'></th>
+        <th style='width:3em'>Index</th>
+        <th style='width:10em'>Role</th>
+        <th>Text</th>
+    </tr>
+    <tr>
+    <form class='editable form-inline' id='add_definition' action='{% url 'dictionary:add_definition' gloss.id %}' method="POST" enctype="multipart/form-data">
+        <td></td>
+        <td></td>
+        <td>
+            {% csrf_token %}
+            <div class='form-group'>
+                <label for='count' class='sr-only'>Index</label>
+                <input class='form-control' name='count' type='number' value='1' style='width: 5em'>
+            </div>
+        </td>
+        <td>
+            <div class='form-group'>
+                {{definitionform.role}}
+            </div>
+        </td>
+        <td>
+            <div class='form-group'>
+                <input class='form-control' name='text' placeholder='Enter new definition/note'>
+            </div>
+        </td>
+        <td>
+            <div class='form-group'>
+                {{definitionform.videofile}}
+            </div>
+        </td>
+        <td>
+            <div class='form-group'>
+                <input class='btn' type='submit' value='Save New'></td>
+            </div>
+        </td>
+    </tr>
     </form>
     {% endif %}
 
+    </table>
+    {% upload_modal id='defnUploadModal' category='Definition' tag=0 redirect=request.get_full_path %}
 
     </div>
 

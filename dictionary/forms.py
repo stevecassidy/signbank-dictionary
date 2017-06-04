@@ -80,6 +80,9 @@ class GlossSearchForm(forms.ModelForm):
 
 class DefinitionForm(forms.ModelForm):
 
+    # optional video file uploaded with the new definition
+    videofile = forms.FileField(label="", required=False)
+
     class Meta:
         model = Definition
         fields = ('count', 'role', 'text')

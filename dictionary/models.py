@@ -125,7 +125,7 @@ class Definition(models.Model):
         return str(self.gloss)+"/"+self.role
 
     gloss = models.ForeignKey("Gloss")
-    text = models.TextField()
+    text = models.TextField(blank=True)
     role = models.CharField(max_length=20, choices=defn_role_choices)
     count = models.IntegerField()
     published = models.BooleanField(default=True)
