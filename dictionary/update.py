@@ -414,10 +414,8 @@ def add_definition(request, glossid):
             defn = Definition(gloss=thisgloss, count=count, role=role, text=text, published=False)
             defn.save()
 
-            print("VID:", form.cleaned_data['videofile'])
             # check for a video upload, if present, attach to this definition
             if form.cleaned_data['videofile']:
-                print("dealing with video")
                 vfile = form.cleaned_data['videofile']
                 tag = defn.id
 
