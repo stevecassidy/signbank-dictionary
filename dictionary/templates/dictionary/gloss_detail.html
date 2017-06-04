@@ -481,15 +481,22 @@
         <td class='edit edit_int' id='definitioncount_{{def.id}}'>{{def.count}}</td>
         <td class='edit edit_role' id='definitionrole_{{def.id}}'>{{def.get_role_display}}</td>
         <td class='edit edit_area' id='definition_{{def.id}}'>{{def.text}}</td>
-        <td>
+        <td class='edit' id='definitionvideo_{{def.id}}'>
+
             {% if def.video %}
                 {% videoplayer id=def.video.id category='Definition' tag=def.id height=100 width=120 %}
+                <div style='padding-top: 1em'>
+                    <button type="button" class="btn btn-danger editable"
+                            data-toggle="modal" data-target="#defnVideoRemoveModal"
+                            data-definitionid="{{def.id}}">Remove Video</button>
+                </div>
+
+
+            {% else %}
+                <button type="button" class="btn btn-primary editable"
+                        data-toggle="modal" data-target="#defnUploadModal"
+                        data-definitionid="{{def.id}}">Upload Video</button>
             {% endif %}
-        </td>
-        <td class='edit' id='definitionvideo_{{def.id}}'>
-        <button type="button" class="btn btn-primary editable"
-                data-toggle="modal" data-target="#defnUploadModal"
-                data-definitionid="{{def.id}}">Upload Video</button>
         </td>
       </tr>
       {% endif %}
@@ -497,17 +504,17 @@
     {% endfor %}
 
     {% if perms.dictionary.change_gloss %}
-    <tr>
+    <tr class='editable'>
         <th colspan=6>Add New Definition</th>
     </tr>
-    <tr>
+    <tr class='editable'>
         <th style='width:1em'></th>
         <th style='width:3em'></th>
         <th style='width:3em'>Index</th>
         <th style='width:10em'>Role</th>
         <th>Text</th>
     </tr>
-    <tr>
+    <tr class='editable'>
     <form class='editable form-inline' id='add_definition' action='{% url 'dictionary:add_definition' gloss.id %}' method="POST" enctype="multipart/form-data">
         <td></td>
         <td></td>
@@ -532,8 +539,6 @@
             <div class='form-group'>
                 {{definitionform.videofile}}
             </div>
-        </td>
-        <td>
             <div class='form-group'>
                 <input class='btn' type='submit' value='Save New'></td>
             </div>
@@ -544,7 +549,21 @@
 
     </table>
     {% upload_modal id='defnUploadModal' category='Definition' tag=0 redirect=request.get_full_path %}
+    <div class="modal fade" id="defnVideoRemoveModal" tabindex="-1" role="dialog" aria-labelledby="#dvrmodalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+           <div class="modal-content">
+               <div class='modal-header'>
+                   <h2 id='dvrmodalTitle'>Delete Definition Video</h2>
+               </div>
+               <div class='modal-body'>
+                   <p>This action will delete the video
+                       associated with this definition.
+                       It cannot be undone.</p>
+                </div>
 
+           </div>
+         </div>
+   </div>
     </div>
 
     </div>
