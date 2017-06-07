@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'gloss/(?P<idgloss>.+).html$', gloss, name='gloss'),
 
     url(r'^search/$', search, name="search"),
+    url(r'^search/region/$', set_region, name='set_region'),
     url(r'^update/gloss/(?P<glossid>\d+)$', update_gloss, name='update_gloss'),
     url(r'^update/tag/(?P<glossid>\d+)$', add_tag, name='add_tag'),
     url(r'^update/definition/(?P<glossid>\d+)$', add_definition, name='add_definition'),

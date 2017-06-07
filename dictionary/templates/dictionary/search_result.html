@@ -7,6 +7,15 @@ $(document).ready(function() {
     $('#id_category').on('change', function() {
         $(this).closest('form').submit();
     });
+    // update the region via ajax when the region form is modified
+    $('#id_region').on('change', function() {
+        var $form = $(this).closest('form'),
+            url = $form.attr( 'action' );
+
+        var posting = $.post( url, { region: $('#id_region').val(),
+                                     csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                                   });
+    });
 });
 </script>
 {% endblock %}
@@ -36,11 +45,11 @@ $(document).ready(function() {
                    or browse keywords starting with any letter.  Limit search
                to a category of signs by selecting from the list of topics above.</p>
 
-<!--
-               <form action="">
+               <form id='setregionform' action="{% url 'dictionary:set_region' %}" method="POST">
+                   {% csrf_token %}
                    {{regionform}}
                </form>
--->
+
               </div>
           </div>
         </div>
@@ -48,7 +57,7 @@ $(document).ready(function() {
         <div class='col-md-9'>
 
 
-            <div class="alphablock">
+            <div style='font-size: 8pt' class="alphablock">
                 <nav aria-label="Alphabetic navigation">
                     <ul class="pagination">
                     {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}

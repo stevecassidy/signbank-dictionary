@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import Context, RequestContext, loader
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from tagging.models import Tag, TaggedItem
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.safestring import mark_safe
+from django.db.models.functions import Lower
 
 #from django.utils.encoding import smart_unicode
 
@@ -25,10 +26,14 @@ def dictionary_context_processor(request):
     """Context Processor to inject search form into every page
     on the site."""
 
-    return {'menusearchform': UserSignSearchForm(auto_id="id_menu_%s"),
-            'regionform': SetRegionForm(),
-            }
+    if 'region' in request.session:
+        rform = SetRegionForm({'region': request.session['region']})
+    else:
+        rform = SetRegionForm()
 
+    return {'menusearchform': UserSignSearchForm(auto_id="id_menu_%s"),
+            'regionform': rform,
+            }
 
 def login_required_config(function):
     '''
@@ -401,7 +406,6 @@ def search(request):
                 # and it won't match anything in the dictionary
                 words = []
 
-
             if category in ['all', '']:
 
                 if request.user.has_perm('dictionary.search_gloss'):
@@ -411,6 +415,7 @@ def search(request):
                     # regular users see either everything that's published
                     words = Keyword.objects.filter(text__istartswith=term,
                                                     translation__gloss__inWeb__exact=True).distinct()
+                words = words.order_by(Lower('text'))
             else:
                 # might fail if category doesn't exist
                 tag = Tag.objects.get(name=category)
@@ -429,6 +434,7 @@ def search(request):
                     kw = Keyword.objects.get(id=tr['translation__translation'])
                     if not kw in words:
                         words.append(kw)
+                words = sorted(words, key=lambda x: x.text.lower())
 
             if safe:
                 words = remove_crude_words(words)
@@ -456,6 +462,31 @@ def search(request):
                                'ANON_TAG_SEARCH': getattr(settings, 'ANON_TAG_SEARCH', True),
                                'language': getattr(settings, 'LANGUAGE_NAME', 'Auslan'),
                                })
+
+
+def set_region(request):
+    """View to modify the default search region for a user.
+    Modifies the user session to record the search region.
+    Return a JSON response containing the updated
+    search region (expect this to be called via ajax)."""
+
+    form = SetRegionForm(request.POST)
+
+    if form.is_valid():
+
+        region = form.cleaned_data['region']
+        # update the session
+        request.session['region'] = region.pk
+
+    if 'region' in request.session:
+        region = Region.objects.get(pk=request.session['region'])
+    else:
+        region = Region.objects.get(pk=1)
+
+    request.session['region'] = region.pk
+
+    return JsonResponse({'region': region.pk})
+
 
 
 def keyword_value_list(request, prefix=None):

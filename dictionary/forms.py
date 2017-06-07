@@ -12,16 +12,21 @@ class UserSignSearchForm(forms.Form):
     query = forms.CharField(label='Keywords starting with', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'keyword'}), required=False)
     category = forms.ChoiceField(label='Search', choices=CATEGORY_CHOICES, required=False, widget=forms.Select(attrs={'class': 'form-control'}))
 
-
-REGION_CHOICES = [('Australia Wide', 'Australia Wide'),
-                  ('New South Wales', 'New South Wales'),
-                  ('Tasmania', 'Tasmania')]
+class DialectModelChoiceField(forms.ModelChoiceField):
+    """Specialisation of ModelChoiceField that overrides the
+    label_from_instance method for the Dialect model
+    """
+    
+    def label_from_instance(self, obj):
+        return obj.name
 
 class SetRegionForm(forms.Form):
 
-    region = forms.ChoiceField(label="Region",
-                               choices=REGION_CHOICES, required=True,
-                               widget=forms.Select(attrs={'class': 'form-control'}))
+    region = DialectModelChoiceField(label="Dialect",
+                                    queryset=Dialect.objects.all(),
+                                    required=True,
+                                    empty_label=None,
+                                    widget=forms.Select(attrs={'class': 'form-control'}))
 
 
 class GlossModelForm(forms.ModelForm):

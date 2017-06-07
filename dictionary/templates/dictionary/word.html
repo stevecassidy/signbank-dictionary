@@ -134,7 +134,7 @@
             </div>
             {% else %}
                 {% if lastmatch %}
-                <a class='btn btn-default navbar-btn' href="{% url 'word' lastmatch %}">Return to Matches</a>
+                <a class='btn btn-default navbar-btn' href="/dictionary/words/{{lastmatch}}.html">Return to Matches</a>
                 {% endif %}
             {% endif %}
         </div>
