@@ -1,269 +1,278 @@
 [
  {
-        "pk": 1, 
-        "model": "dictionary.keyword", 
+        "pk": 1,
+        "model": "dictionary.keyword",
         "fields": {
             "text": "Aborigine"
         }
-    }, 
+    },
     {
-        "pk": 2, 
-        "model": "dictionary.keyword", 
+        "pk": 2,
+        "model": "dictionary.keyword",
         "fields": {
             "text": "Abraham"
         }
-    }, 
+    },
     {
-        "pk": 3, 
-        "model": "dictionary.keyword", 
+        "pk": 3,
+        "model": "dictionary.keyword",
         "fields": {
             "text": "Adam"
         }
-    }, 
+    },
     {
-        "pk": 4, 
-        "model": "dictionary.keyword", 
+        "pk": 4,
+        "model": "dictionary.keyword",
         "fields": {
             "text": "Adelaide"
         }
-    }, 
+    },
     {
-        "pk": 5, 
-        "model": "dictionary.keyword", 
+        "pk": 5,
+        "model": "dictionary.keyword",
         "fields": {
             "text": "Africa"
         }
-    }, 
+    },
     {
-        "pk": 6, 
-        "model": "dictionary.keyword", 
+        "pk": 6,
+        "model": "dictionary.keyword",
         "fields": {
             "text": "African"
         }
     },
-    
-    
+
+
     {
-        "pk": 1, 
-        "model": "dictionary.translation", 
+        "pk": 1,
+        "model": "dictionary.translation",
         "fields": {
-            "index": 1, 
-            "translation": 1, 
+            "index": 1,
+            "translation": 1,
             "gloss": 1
         }
-    }, 
+    },
     {
-        "pk": 2, 
-        "model": "dictionary.translation", 
+        "pk": 2,
+        "model": "dictionary.translation",
         "fields": {
-            "index": 1, 
-            "translation": 2, 
+            "index": 1,
+            "translation": 2,
             "gloss": 2
         }
-    }, 
+    },
     {
-        "pk": 3, 
-        "model": "dictionary.translation", 
+        "pk": 3,
+        "model": "dictionary.translation",
         "fields": {
-            "index": 1, 
-            "translation": 3, 
+            "index": 1,
+            "translation": 3,
             "gloss": 3
         }
-    }, 
+    },
     {
-        "pk": 4, 
-        "model": "dictionary.translation", 
+        "pk": 4,
+        "model": "dictionary.translation",
         "fields": {
-            "index": 1, 
-            "translation": 4, 
+            "index": 1,
+            "translation": 4,
             "gloss": 4
         }
-    }, 
-    
+    },
+
     {
-        "pk": 5, 
-        "model": "dictionary.translation", 
+        "pk": 5,
+        "model": "dictionary.translation",
         "fields": {
-            "index": 1, 
-            "translation": 5, 
+            "index": 1,
+            "translation": 5,
             "gloss": 5
         }
-    }, 
-    
+    },
+
      {
-        "pk": 6, 
-        "model": "dictionary.translation", 
+        "pk": 6,
+        "model": "dictionary.translation",
         "fields": {
-            "index": 1, 
-            "translation": 6, 
+            "index": 1,
+            "translation": 6,
             "gloss": 6
         }
-    }, 
-    
+    },
+
     {
-        "pk": 1, 
-        "model": "dictionary.gloss", 
+        "pk": 1,
+        "model": "dictionary.gloss",
         "fields": {
-            "annotation_idgloss": "ABORIGINE1", 
+            "annotation_idgloss": "ABORIGINE1",
             "idgloss": "Aborigine1",
             "sn" : 1,
             "inWeb": true
         }
-    }, 
-    
+    },
+
      {
-        "pk": 2, 
-        "model": "dictionary.gloss", 
+        "pk": 2,
+        "model": "dictionary.gloss",
         "fields": {
-            "annotation_idgloss": "ABRAHAM", 
+            "annotation_idgloss": "ABRAHAM",
             "idgloss": "Abraham",
             "sn" : 3,
             "inWeb": false
         }
-    }, 
-    
+    },
+
     {
-        "pk": 3, 
-        "model": "dictionary.gloss", 
+        "pk": 3,
+        "model": "dictionary.gloss",
         "fields": {
-            "annotation_idgloss": "ADAM", 
+            "annotation_idgloss": "ADAM",
             "idgloss": "Adam",
             "sn" : 4
         }
-    }, 
-    
+    },
+
      {
-        "pk": 4, 
-        "model": "dictionary.gloss", 
+        "pk": 4,
+        "model": "dictionary.gloss",
         "fields": {
-            "annotation_idgloss": "ADELAIDE", 
+            "annotation_idgloss": "ADELAIDE",
             "idgloss": "Adelaide",
             "sn" : 5
         }
-    }, 
-    
+    },
+
      {
-        "pk": 5, 
-        "model": "dictionary.gloss", 
+        "pk": 5,
+        "model": "dictionary.gloss",
         "fields": {
-            "annotation_idgloss": "AFRICA", 
+            "annotation_idgloss": "AFRICA",
             "idgloss": "Africa",
             "sn" : 6
         }
-    }, 
-    
+    },
+
      {
-        "pk": 6, 
-        "model": "dictionary.gloss", 
+        "pk": 6,
+        "model": "dictionary.gloss",
         "fields": {
-            "annotation_idgloss": "AFRICAN", 
+            "annotation_idgloss": "AFRICAN",
             "idgloss": "African",
             "sn" : 7
         }
-    },   
+    },
      {
-        "pk": 2, 
-        "model": "dictionary.language", 
+        "pk": 2,
+        "model": "dictionary.language",
         "fields": {
-            "name": "ASL", 
+            "name": "ASL",
             "description": "American Sign Language"
         }
-    }, 
+    },
     {
-        "pk": 1, 
-        "model": "dictionary.language", 
+        "pk": 1,
+        "model": "dictionary.language",
         "fields": {
-            "name": "Auslan", 
+            "name": "Auslan",
             "description": "Auslan is the sign language of Australia"
         }
-    }, 
+    },
     {
-        "pk": 3, 
-        "model": "dictionary.language", 
+        "pk": 3,
+        "model": "dictionary.language",
         "fields": {
-            "name": "BSL", 
+            "name": "BSL",
             "description": "British Sign Language"
         }
     },
      {
-        "pk": 9, 
-        "model": "dictionary.dialect", 
+        "pk": 9,
+        "model": "dictionary.dialect",
         "fields": {
-            "name": "Australia Wide", 
-            "language": 1, 
+            "name": "Australia Wide",
+            "language": 1,
+            "index": 1,
             "description": ""
         }
-    }, 
+    },
     {
-        "pk": 6, 
-        "model": "dictionary.dialect", 
+        "pk": 6,
+        "model": "dictionary.dialect",
         "fields": {
-            "name": "New South Wales", 
-            "language": 1, 
+            "name": "New South Wales",
+            "language": 1,
+            "index": 4,
             "description": ""
         }
-    }, 
+    },
     {
-        "pk": 7, 
-        "model": "dictionary.dialect", 
+        "pk": 7,
+        "model": "dictionary.dialect",
         "fields": {
-            "name": "Northern Dialect", 
-            "language": 1, 
+            "name": "Northern Dialect",
+            "language": 1,
+            "index": 2,
             "description": ""
         }
-    }, 
+    },
     {
-        "pk": 5, 
-        "model": "dictionary.dialect", 
+        "pk": 5,
+        "model": "dictionary.dialect",
         "fields": {
-            "name": "Queensland", 
-            "language": 1, 
+            "name": "Queensland",
+            "language": 1,
+            "index": 4,
             "description": ""
         }
-    }, 
+    },
     {
-        "pk": 4, 
-        "model": "dictionary.dialect", 
+        "pk": 4,
+        "model": "dictionary.dialect",
         "fields": {
-            "name": "South Australia", 
-            "language": 1, 
+            "name": "South Australia",
+            "language": 1,
+            "index": 4,
             "description": ""
         }
-    }, 
+    },
     {
-        "pk": 8, 
-        "model": "dictionary.dialect", 
+        "pk": 8,
+        "model": "dictionary.dialect",
         "fields": {
-            "name": "Southern Dialect", 
-            "language": 1, 
+            "name": "Southern Dialect",
+            "language": 1,
+            "index": 2,
             "description": ""
         }
-    }, 
+    },
     {
-        "pk": 1, 
-        "model": "dictionary.dialect", 
+        "pk": 1,
+        "model": "dictionary.dialect",
         "fields": {
-            "name": "Tasmania", 
-            "language": 1, 
+            "name": "Tasmania",
+            "language": 1,
+            "index": 4,
             "description": ""
         }
-    }, 
+    },
     {
-        "pk": 2, 
-        "model": "dictionary.dialect", 
+        "pk": 2,
+        "model": "dictionary.dialect",
         "fields": {
-            "name": "Victoria", 
-            "language": 1, 
+            "name": "Victoria",
+            "language": 1,
+            "index": 4,
             "description": ""
         }
-    }, 
+    },
     {
-        "pk": 3, 
-        "model": "dictionary.dialect", 
+        "pk": 3,
+        "model": "dictionary.dialect",
         "fields": {
-            "name": "Western Australia", 
-            "language": 1, 
+            "name": "Western Australia",
+            "language": 1,
+            "index": 4,
             "description": ""
         }
-    }         
+    }
  ]

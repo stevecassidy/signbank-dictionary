@@ -7,15 +7,6 @@ $(document).ready(function() {
     $('#id_category').on('change', function() {
         $(this).closest('form').submit();
     });
-    // update the region via ajax when the region form is modified
-    $('#id_region').on('change', function() {
-        var $form = $(this).closest('form'),
-            url = $form.attr( 'action' );
-
-        var posting = $.post( url, { region: $('#id_region').val(),
-                                     csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
-                                   });
-    });
 });
 </script>
 {% endblock %}
@@ -49,6 +40,9 @@ $(document).ready(function() {
                    {% csrf_token %}
                    {{regionform}}
                </form>
+               <p>The dialect setting determines the ordering of signs shown for
+                   keyword matches.  The preferred dialect will be shown first
+                   if there are multiple signs matching a keyword.</p>
 
               </div>
           </div>
@@ -67,9 +61,6 @@ $(document).ready(function() {
                     </ul>
                 </nav>
             </div>
-
-
-
 
         {% ifequal wordcount 0 %}
            {% if query %}

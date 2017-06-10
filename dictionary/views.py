@@ -162,7 +162,15 @@ def word(request, keyword, n):
     word = get_object_or_404(Keyword, text=keyword)
 
     # returns (matching translation, number of matches)
-    (trans, total) =  word.match_request(request, n, )
+    safe = (not request.user.is_authenticated()) and settings.ANON_SAFE_SEARCH
+    searchall = request.user.has_perm('dictionary.search_gloss')
+    preferdialect = None
+    if 'region' in request.session:
+        print("REGION", request.session['region'])
+        preferdialect = Dialect.objects.get(id=request.session['region'])
+
+
+    (trans, total) =  word.match_request(n, searchall, safe, preferdialect)
 
     # and all the keywords associated with this sign
     allkwds = trans.gloss.translation_set.all()
@@ -463,7 +471,6 @@ def search(request):
                                'language': getattr(settings, 'LANGUAGE_NAME', 'Auslan'),
                                })
 
-
 def set_region(request):
     """View to modify the default search region for a user.
     Modifies the user session to record the search region.
@@ -486,8 +493,6 @@ def set_region(request):
     request.session['region'] = region.pk
 
     return JsonResponse({'region': region.pk})
-
-
 
 def keyword_value_list(request, prefix=None):
     """View to generate a list of possible values for

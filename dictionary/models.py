@@ -38,15 +38,8 @@ class Translation(models.Model):
             idx += 1
         return "/dictionary/"
 
-
     class Meta:
-        ordering = ['gloss', 'index']
-
-    class Admin:
-        list_display = ['gloss', 'translation']
-        search_fields = ['gloss__idgloss']
-
-
+        ordering = ['gloss__region__dialect__index', 'index']
 
 class Keyword(models.Model):
     """An english keyword that will be a translation of a sign"""
@@ -65,22 +58,18 @@ class Keyword(models.Model):
     class Meta:
         ordering = ['text']
 
-    class Admin:
-        search_fields = ['text']
-
-
-
-    def match_request(self, request, n):
+    def match_request(self, n, searchall=False, safe=True, preferdialect=None):
         """Find the translation matching a keyword request given an index 'n'
         response depends on login status
         Returns a tuple (translation, count) where count is the total number
         of matches."""
 
-        if request.user.has_perm('dictionary.search_gloss'):
+        print("MR", n, searchall, safe, preferdialect)
+
+        if searchall:
             alltrans = self.translation_set.all()
         else:
             alltrans = self.translation_set.filter(gloss__inWeb__exact=True)
-
 
         #Remove VARIANTS
         rewisedtrans = list(alltrans)
@@ -92,18 +81,30 @@ class Keyword(models.Model):
         alltrans = rewisedtrans
 
         # remove crude signs for non-authenticated users if ANON_SAFE_SEARCH is on
-        try:
-            crudetag = tagging.models.Tag.objects.get(name='lexis:crude')
-        except:
-            crudetag = None
-
-        safe = (not request.user.is_authenticated()) and settings.ANON_SAFE_SEARCH
-        if safe and crudetag:
-            alltrans = [tr for tr in alltrans if not crudetag in tagging.models.Tag.objects.get_for_object(tr.gloss)]
+        if safe:
+            try:
+                crudetag = tagging.models.Tag.objects.get(name='lexis:crude')
+                alltrans = [tr for tr in alltrans if not crudetag in tagging.models.Tag.objects.get_for_object(tr.gloss)]
+            except:
+                pass
 
         # if there are no translations, generate a 404
         if len(alltrans) == 0:
             raise Http404
+
+        # translations should be ordered by the region (dialect)
+        # but we may prefer one dialect
+        if preferdialect is not None:
+            # pull any gloss with the preferred dialect to the
+            # front of the list
+            print("preferring dialect", preferdialect)
+            newtrans= []
+            for trans in alltrans:
+                if trans.gloss.region_set.filter(dialect__exact=preferdialect).count() > 0:
+                    newtrans.insert(0, trans)
+                else:
+                    newtrans.append(trans)
+            alltrans = newtrans
 
         # take the nth translation if n is in range
         # otherwise take the last
@@ -114,9 +115,7 @@ class Keyword(models.Model):
 
         return (trans, len(alltrans))
 
-
 defn_role_choices = settings.DEFINITION_ROLE_CHOICES
-
 
 class Definition(models.Model):
     """An English text associated with an Auslan glosses"""
@@ -147,10 +146,6 @@ class Definition(models.Model):
         except:
             return None
 
-
-
-
-
 class Language(models.Model):
     """A sign language name"""
 
@@ -167,11 +162,13 @@ class Dialect(models.Model):
     """A dialect name - a regional dialect of a given Language"""
 
     class Meta:
-        ordering = ['language', 'name']
+        ordering = ['index', 'language', 'name']
 
     language = models.ForeignKey(Language)
     name = models.CharField(max_length=20)
-    description = models.TextField()
+    description = models.TextField(blank=True)
+    # index field defines an ordering over dialects
+    index = models.IntegerField(default=1)
 
     def __str__(self):
         return self.language.name+"/"+self.name
@@ -186,7 +183,6 @@ class Region(models.Model):
     dialect = models.ForeignKey(Dialect)
     frequency = models.TextField()
     traditional = models.BooleanField(default=False)
-
 
 handshapeChoices = (('notset', 'No Value Set'),
                     ('0.0', 'N/A'),

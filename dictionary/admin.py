@@ -93,6 +93,7 @@ class DialectInline(admin.TabularInline):
 
 class DialectAdmin(VersionAdmin):
     model = Dialect
+    list_display = ['name', 'index', 'language']
 
 class LanguageAdmin(VersionAdmin):
     model = Language
