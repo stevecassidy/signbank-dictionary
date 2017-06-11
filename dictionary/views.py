@@ -35,7 +35,7 @@ def dictionary_context_processor(request):
 
     return {'menusearchform': UserSignSearchForm(auto_id="id_menu_%s"),
             'regionform': rform,
-            'dialect': dialect.name
+            'dialect': dialect
             }
 
 def login_required_config(function):
