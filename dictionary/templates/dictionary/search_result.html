@@ -7,6 +7,17 @@ $(document).ready(function() {
     $('#id_category').on('change', function() {
         $(this).closest('form').submit();
     });
+
+    // update the region via ajax when the region form is modified
+    $('#id_region').on('change', function() {
+        var $form = $(this).closest('form'),
+            url = $form.attr( 'action' );
+
+        var posting = $.post( url, { region: $('#id_region').val(),
+                                     csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                                   });
+        $('#nav_dialect').text($('#id_region option:selected').text());
+    });
 });
 </script>
 {% endblock %}

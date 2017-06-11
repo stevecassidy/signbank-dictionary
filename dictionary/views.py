@@ -28,11 +28,14 @@ def dictionary_context_processor(request):
 
     if 'region' in request.session:
         rform = SetRegionForm({'region': request.session['region']})
+        dialect = Dialect.objects.get(id=request.session['region'])
     else:
         rform = SetRegionForm()
+        dialect = ''
 
     return {'menusearchform': UserSignSearchForm(auto_id="id_menu_%s"),
             'regionform': rform,
+            'dialect': dialect.name
             }
 
 def login_required_config(function):

@@ -1,0 +1,280 @@
+[
+{
+    "pk": 1, 
+    "model": "dictionary.language", 
+    "fields": {
+        "name": "Auslan", 
+        "description": "Auslan is the sign language of Australia"
+    }
+},
+{
+    "pk": 2, 
+    "model": "dictionary.language", 
+    "fields": {
+        "name": "BSL", 
+        "description": "British Sign Language"
+    }
+},
+{
+    "pk": 3, 
+    "model": "dictionary.language", 
+    "fields": {
+        "name": "ASL", 
+        "description": "American Sign Language"
+    }
+},
+{
+    "pk": 1, 
+    "model": "dictionary.dialect", 
+    "fields": {
+        "name": "Tasmania", 
+        "language": 1, 
+        "description": ""
+    }
+},
+{
+    "pk": 2, 
+    "model": "dictionary.dialect", 
+    "fields": {
+        "name": "Victoria", 
+        "language": 1, 
+        "description": ""
+    }
+},
+{
+    "pk": 3, 
+    "model": "dictionary.dialect", 
+    "fields": {
+        "name": "Western Australia", 
+        "language": 1, 
+        "description": ""
+    }
+},
+{
+    "pk": 4, 
+    "model": "dictionary.dialect", 
+    "fields": {
+        "name": "South Australia", 
+        "language": 1, 
+        "description": ""
+    }
+},
+{
+    "pk": 5, 
+    "model": "dictionary.dialect", 
+    "fields": {
+        "name": "Queensland", 
+        "language": 1, 
+        "description": ""
+    }
+},
+{
+    "pk": 6, 
+    "model": "dictionary.dialect", 
+    "fields": {
+        "name": "New South Wales", 
+        "language": 1, 
+        "description": ""
+    }
+},
+{
+    "pk": 7, 
+    "model": "dictionary.dialect", 
+    "fields": {
+        "name": "Northern Dialect", 
+        "language": 1, 
+        "description": ""
+    }
+},
+{
+    "pk": 8, 
+    "model": "dictionary.dialect", 
+    "fields": {
+        "name": "Southern Dialect", 
+        "language": 1, 
+        "description": ""
+    }
+},
+{
+    "pk": 9, 
+    "model": "dictionary.dialect", 
+    "fields": {
+        "name": "Australia Wide", 
+        "language": 1, 
+        "description": ""
+    }
+},
+{
+    "pk": 1, 
+    "model": "dictionary.gloss", 
+    "fields": {
+        "bslloantf": null, 
+        "isNew": false, 
+        "initial_relative_orientation": null, 
+        "final_secondary_loc": null, 
+        "final_relative_orientation": null, 
+        "final_domhndsh": null, 
+        "sense": null, 
+        "inittext": "", 
+        "initial_palm_orientation": null, 
+        "final_palm_orientation": null, 
+        "locsecond": null, 
+        "final_loc": null, 
+        "blendtf": null, 
+        "locprim": null, 
+        "asltf": null, 
+        "bsltf": null, 
+        "bslgloss": "", 
+        "regional_template": "", 
+        "initial_secondary_loc": null, 
+        "aslgloss": "", 
+        "compound": "", 
+        "comptf": null, 
+        "final_subhndsh": null, 
+        "subhndsh": null, 
+        "asloantf": null, 
+        "sedefinetf": null, 
+        "language": [], 
+        "morph": "", 
+        "annotation_idgloss": "Hello1", 
+        "idgloss": "Hello", 
+        "inWeb": false, 
+        "sn": 123, 
+        "blend": null, 
+        "segloss": null, 
+        "StemSN": null, 
+        "domhndsh": null
+    }
+},
+{
+    "pk": 2, 
+    "model": "dictionary.gloss", 
+    "fields": {
+        "bslloantf": null, 
+        "isNew": false, 
+        "initial_relative_orientation": null, 
+        "final_secondary_loc": null, 
+        "final_relative_orientation": null, 
+        "final_domhndsh": null, 
+        "sense": null, 
+        "inittext": "", 
+        "initial_palm_orientation": null, 
+        "final_palm_orientation": null, 
+        "locsecond": null, 
+        "final_loc": null, 
+        "blendtf": null, 
+        "locprim": null, 
+        "asltf": null, 
+        "bsltf": null, 
+        "bslgloss": "", 
+        "regional_template": "", 
+        "initial_secondary_loc": null, 
+        "aslgloss": "", 
+        "compound": "", 
+        "comptf": null, 
+        "final_subhndsh": null, 
+        "subhndsh": null, 
+        "asloantf": null, 
+        "sedefinetf": null, 
+        "language": [
+            1
+        ], 
+        "morph": "", 
+        "annotation_idgloss": "sdfsdf", 
+        "idgloss": "sdfsdf", 
+        "inWeb": false, 
+        "sn": 1234, 
+        "blend": null, 
+        "segloss": null, 
+        "StemSN": null, 
+        "domhndsh": null
+    }
+},
+{
+    "pk": 3, 
+    "model": "dictionary.gloss", 
+    "fields": {
+        "bslloantf": null, 
+        "isNew": false, 
+        "initial_relative_orientation": null, 
+        "final_secondary_loc": null, 
+        "final_relative_orientation": null, 
+        "final_domhndsh": null, 
+        "sense": null, 
+        "inittext": "", 
+        "initial_palm_orientation": null, 
+        "final_palm_orientation": null, 
+        "locsecond": null, 
+        "final_loc": null, 
+        "blendtf": null, 
+        "locprim": null, 
+        "asltf": null, 
+        "bsltf": null, 
+        "bslgloss": "", 
+        "regional_template": "", 
+        "initial_secondary_loc": null, 
+        "aslgloss": "", 
+        "compound": "", 
+        "comptf": null, 
+        "final_subhndsh": null, 
+        "subhndsh": null, 
+        "asloantf": null, 
+        "sedefinetf": null, 
+        "language": [], 
+        "morph": "", 
+        "annotation_idgloss": "Foo", 
+        "idgloss": "123", 
+        "inWeb": false, 
+        "sn": 100, 
+        "blend": null, 
+        "segloss": null, 
+        "StemSN": null, 
+        "domhndsh": null
+    }
+},
+{
+    "pk": 1, 
+    "model": "dictionary.relationrole", 
+    "fields": {
+        "forwardmessage": "Has Variant", 
+        "role": "variant", 
+        "backwardmessage": "Is Variant Of"
+    }
+},
+{
+    "pk": 2, 
+    "model": "dictionary.relationrole", 
+    "fields": {
+        "forwardmessage": "Antonym", 
+        "role": "antonym", 
+        "backwardmessage": "Antonym"
+    }
+},
+{
+    "pk": 3, 
+    "model": "dictionary.relationrole", 
+    "fields": {
+        "forwardmessage": "Synonym", 
+        "role": "synonym", 
+        "backwardmessage": "Synonym"
+    }
+},
+{
+    "pk": 4, 
+    "model": "dictionary.relationrole", 
+    "fields": {
+        "forwardmessage": "See Also", 
+        "role": "seealso", 
+        "backwardmessage": "See Also"
+    }
+},
+{
+    "pk": 5, 
+    "model": "dictionary.relationrole", 
+    "fields": {
+        "forwardmessage": "Homophone", 
+        "role": "homophone", 
+        "backwardmessage": "Homophone"
+    }
+}
+]
