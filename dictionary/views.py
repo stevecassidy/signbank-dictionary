@@ -28,10 +28,17 @@ def dictionary_context_processor(request):
 
     if 'region' in request.session:
         rform = SetRegionForm({'region': request.session['region']})
-        dialect = Dialect.objects.get(id=request.session['region']).name
+        try:
+            dialect = Dialect.objects.get(id=request.session['region']).name
+        except:
+            dialect = ''
     else:
         rform = SetRegionForm()
-        dialect = ''
+        # default to the first dialect
+        try:
+            dialect = Dialect.objects.all()[0].name
+        except:
+            dialect = ''
 
     return {'menusearchform': UserSignSearchForm(auto_id="id_menu_%s"),
             'regionform': rform,
