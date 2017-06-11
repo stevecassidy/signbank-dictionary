@@ -28,7 +28,7 @@ def dictionary_context_processor(request):
 
     if 'region' in request.session:
         rform = SetRegionForm({'region': request.session['region']})
-        dialect = Dialect.objects.get(id=request.session['region'])
+        dialect = Dialect.objects.get(id=request.session['region']).name
     else:
         rform = SetRegionForm()
         dialect = ''
