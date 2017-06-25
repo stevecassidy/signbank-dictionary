@@ -49,7 +49,18 @@ $(document).ready(function() {
 
                <form id='setregionform' action="{% url 'dictionary:set_region' %}" method="POST">
                    {% csrf_token %}
-                   {{regionform}}
+                   {# {{regionform}} #}
+
+                   <select class="form-control" id="id_region" name="region" required="">
+                       {% for choice in regionform.region.field.choices %}
+                          {% ifequal choice.1 ':spacer:' %}
+                           <option disabled>--------------</option>
+                          {% else %}
+                           <option value="{{choice.0}}">{{choice.1}}</option>
+                          {% endifequal %}
+                       {% endfor %}
+                   </select>
+
                </form>
                <p>The dialect setting determines the ordering of signs shown for
                    keyword matches.  The preferred dialect will be shown first
