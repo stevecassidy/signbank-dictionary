@@ -159,6 +159,31 @@ def variant(request, idgloss):
                                'DEFINITION_FIELDS' : settings.DEFINITION_FIELDS,
                                })
 
+
+def get_variant_thumbnails(request, gloss):
+    """Get a list of variants for this gloss
+    returns a list of dictionaries each with keys 'pk' and 'idgloss'
+    one for each variant
+    """
+
+    thumbnails = None
+    variant_relations = Relation.objects.filter(source__exact=gloss, role__role__exact="variant")
+
+    if request.user.has_perm('dictionary.search_gloss'):
+        variants = [relation.target for relation in variant_relations]
+    else:
+        variants = [relation.target for relation in variant_relations if relation.target.inWeb == True]
+
+    if len(variants) > 0:
+        thumbnails = []
+        for variant in variants:
+            thumbnail = {}
+            thumbnail['pk'] = variant.pk
+            thumbnail['idgloss'] = variant.idgloss
+            thumbnails.append(thumbnail)
+
+    return thumbnails
+
 def word(request, keyword, n):
     """View of a single keyword that may have more than one sign"""
 
@@ -196,22 +221,6 @@ def word(request, keyword, n):
     if not os.path.exists(os.path.join(settings.MEDIA_ROOT, videourl)):
         videourl = None
 
-    thumbnails = None
-    variant_relations = Relation.objects.filter(source__exact=gloss, role__role__exact="variant")
-
-    if request.user.has_perm('dictionary.search_gloss'):
-        variants = [relation.target for relation in variant_relations]
-    else:
-        variants = [relation.target for relation in variant_relations if relation.target.inWeb == True]
-
-    if len(variants) > 0:
-        thumbnails = []
-        for variant in variants:
-            thumbnail = {}
-            thumbnail['pk'] = variant.pk
-            thumbnail['idgloss'] = variant.idgloss
-            thumbnails.append(thumbnail)
-
     # navigation gives us the next and previous signs
     nav = gloss.navigation(request.user.has_perm('dictionary.search_gloss'))
 
@@ -242,7 +251,7 @@ def word(request, keyword, n):
              'total': total,
              'matches': list(range(1, total+1)),
              'navigation': nav,
-             'thumbnails': thumbnails,
+             'thumbnails': get_variant_thumbnails(request, gloss),
              'dialect_image': map_image_for_regions(gloss.region_set),
              'regions': regions,
              'regional_template_content': regional_template_content,
@@ -342,6 +351,7 @@ def gloss(request, idgloss):
                                'regions': regions,
                                'regional_template_content': regional_template_content,
                                'lastmatch': lastmatch,
+                               'thumbnails': get_variant_thumbnails(request, gloss),
                                'videofile': videourl,
                                'viewname': word,
                                'feedback': True,

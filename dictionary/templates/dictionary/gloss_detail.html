@@ -7,9 +7,8 @@
 {% block extrahead %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/tagmanager.css' %}">
 
-    <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+    <link href="//vjs.zencdn.net/6.2.0/video-js.css" rel="stylesheet">
     <link href="{% static 'css/custom-player.css' %}" rel="stylesheet">
-	<link href="{% static 'loopbutton/videojs.loopbutton.css' %}" rel="stylesheet">
 
 {% endblock %}
 
@@ -19,11 +18,9 @@
     <script type="text/javascript" src="{% static 'js/typeahead.bundle.min.js' %}"></script>
 
     <!-- JS required for video display -->
-    <script src="//vjs.zencdn.net/4.12/video.js"></script>
-	<!-- I have changed some parts of this js file -->
-	<script type="text/javascript" src="{% static 'loopbutton/videojs.loopbutton.min.js' %}"></script>
-	<script type="text/javascript" src="{% static 'js/videoplayersetup.js' %}"></script>
-    <!-- end video JS -->
+    <script src="//vjs.zencdn.net/6.2.0/video.js"></script>
+    <script type="text/javascript" src="{% static 'js/videojs-looper.js' %}"></script>
+        <!-- end video JS -->
 
     {% if perms.dictionary.change_gloss %}
 

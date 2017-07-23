@@ -9,7 +9,7 @@
     }
 
 </script>
-<h4>Found {{thumbnails|length}} variant{% if thumbnails|length|add:"0" > 1 %}s{% endif %} for this sign (click on video to enlarge):</h>
+<h4>Found {{thumbnails|length}} variant{% if thumbnails|length|add:"0" > 1 %}s{% endif %} for this sign (click on video to enlarge):</h4>
 
 <div id='thumbnailscontainer' class='jcarousel-wrapper'>
     <div id='thumbnailsrow' class='jcarousel' data-jcarousel="true">
@@ -19,7 +19,7 @@
                     <a href="#" data-toggle="modal"
                                 data-target="#variant-modal"
                                 data-idgloss="{{thumbnail.idgloss}}">
-                        {% videoplayer id=thumbnail.idgloss category='Gloss' tag=thumbnail.pk width=120 height=100 %}
+                        {% videoplayer id=thumbnail.idgloss category='Gloss' tag=thumbnail.pk width=120 height=90 %}
                     </a>
                 </li>
             {% endfor %}
