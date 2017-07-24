@@ -61,12 +61,16 @@
           $( "#variant-container" ).load( "{% url 'root_page' %}dictionary/variant/" + idgloss + ".html",
           		function() {
                     // initialise video player instance
-                    player = videojs('variantsignvideo', {}, function() {});
+                    if ($('#variantsignvideo').length) {
+                        player = videojs('variantsignvideo', {}, function() {});
+                    }
                 });
         });
         $('#variant-modal').on('hide.bs.modal', function(event) {
             // remove the video player instance
-            player = videojs('variantsignvideo').dispose();
+            if ($('#variantsignvideo').length) {
+                player = videojs('variantsignvideo').dispose();
+            }
         });
     });
     </script>
