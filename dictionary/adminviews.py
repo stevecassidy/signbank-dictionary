@@ -1,6 +1,7 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.db.models import Q
+from django.conf import settings
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 import csv
@@ -25,6 +26,7 @@ class GlossListView(ListView):
         context = super(GlossListView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         context['searchform'] = GlossSearchForm(self.request.GET)
+        context['tagchoices'] = settings.ALLOWED_TAGS
         context['glosscount'] = Gloss.objects.all().count()
         context['add_gloss_form'] = GlossCreateForm()
         context['ADMIN_RESULT_FIELDS'] = settings.ADMIN_RESULT_FIELDS

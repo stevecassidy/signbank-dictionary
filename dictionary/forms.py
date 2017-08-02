@@ -16,7 +16,7 @@ class DialectModelChoiceField(forms.ModelChoiceField):
     """Specialisation of ModelChoiceField that overrides the
     label_from_instance method for the Dialect model
     """
-    
+
     def label_from_instance(self, obj):
         return obj.name
 
@@ -61,8 +61,8 @@ class GlossSearchForm(forms.ModelForm):
     tags = forms.MultipleChoiceField(choices=[(t, t) for t in settings.ALLOWED_TAGS])
     nottags = forms.MultipleChoiceField(choices=[(t, t) for t in settings.ALLOWED_TAGS])
     keyword = forms.CharField(label='Keyword')
-    hasvideo = forms.ChoiceField(label='Has Video', choices=YESNOCHOICES)
-    defspublished = forms.ChoiceField(label="All Definitions Published", choices=YESNOCHOICES)
+    hasvideo = forms.ChoiceField(label='Has Video', choices=YESNOCHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
+    defspublished = forms.ChoiceField(label="All Definitions Published", choices=YESNOCHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
 
     defsearch = forms.CharField(label='Search Definition/Notes')
     defrole = forms.ChoiceField(label='Search Definition/Note Type', choices=ROLE_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
@@ -79,7 +79,17 @@ class GlossSearchForm(forms.ModelForm):
                    'final_domhndsh', 'final_subhndsh', 'final_loc'
                    )
         widgets = {
-                   'inWeb': forms.Select(choices=YESNOCHOICES),
+                   'inWeb': forms.Select(choices=YESNOCHOICES,attrs={'class': 'form-control'}),
+                   'domhndsh': forms.Select(attrs={'class': 'form-control'}),
+                   'subhndsh': forms.Select(attrs={'class': 'form-control'}),
+                   'initial_relative_orientation': forms.Select(attrs={'class': 'form-control'}),
+                   'final_relative_orientation': forms.Select(attrs={'class': 'form-control'}),
+                   'initial_secondary_loc': forms.Select(attrs={'class': 'form-control'}),
+                   'final_secondary_loc': forms.Select(attrs={'class': 'form-control'}),
+                   'locprim': forms.Select(attrs={'class': 'form-control'}),
+                   'final_domhndsh': forms.Select(attrs={'class': 'form-control'}),
+                   'final_subhndsh': forms.Select(attrs={'class': 'form-control'}),
+                   'final_loc': forms.Select(attrs={'class': 'form-control'}),
                    }
 
 

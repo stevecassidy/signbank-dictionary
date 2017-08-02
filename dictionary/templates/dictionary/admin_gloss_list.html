@@ -3,24 +3,23 @@
 
 {% load bootstrap3 %}
 {% block bootstrap3_title %}Signbank: Search Signs{% endblock %}
+
 {% block extrahead %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 {% endblock %}
 
 {% block extrajs %}
-
     <script type="text/javascript" src="{% static 'js/typeahead.bundle.min.js' %}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
     <script type='text/javascript'>
 
     // Submit the search form again if the user changes results per page
     $(document).ready(function() {
-      $('#paginate_by_select').change(function() {
-        $("#search_submit_button").click();
-      });
-    });
-
-    $(document).ready(function(){
-
+        $('#paginate_by_select').change(function() {
+            $("#search_submit_button").click();
+        });
 
         $('.collapsetoggle').click(function() {
             if ($(this).text() == 'Show') {
@@ -30,9 +29,9 @@
             }
         });
 
-
+        // set up nicer select widgets
+        $('#id_tags,#id_nottags,#id_dialect,#id_language').selectpicker({liveSearch: true});
     });
-
 
 // http://www.javascript-coder.com/javascript-form/javascript-reset-form.phtml
 function clearForm(myFormElement) {
@@ -104,6 +103,7 @@ function clearForm(myFormElement) {
                 (<a class='collapsetoggle' href="#" data-toggle="collapse"  data-target='#searchpanels'>Show</a></a>)</div>
 
             <div id='searchpanels' class='collapse'>
+
             <table class='table'>
                 <tr>
                     <td>
@@ -149,11 +149,11 @@ function clearForm(myFormElement) {
             <tr>
 
               <td>
-                <table>
-                    <tr><td><label for='id_inWeb'>{{searchform.inWeb.label}}</label></td><td>{{searchform.inWeb}}</td></tr>
+                <table class='table'>
+                    <tr><td><label for='id_inWeb'>{{searchform.inWeb.label}}</label></td>
+                        <td>{{searchform.inWeb}}</td></tr>
                     <tr><td><label for='id_hasvideo'>{{searchform.hasvideo.label}}</label></td><td>{{searchform.hasvideo}}</td></tr>
                     <tr><td><label for='id_defspublished'>{{searchform.defspublished.label}}</label></td><td>{{searchform.defspublished}}</td></tr>
-                    <tr><td>&nbsp;</td></tr>
                     <tr><td><label for='id_initial_relative_orientation'>{{searchform.initial_relative_orientation.label}}</label></td><td>{{searchform.initial_relative_orientation}}</td></tr>
                     <tr><td><label for='id_final_relative_orientation'>{{searchform.final_relative_orientation.label}}</label></td><td>{{searchform.final_relative_orientation}}</td></tr>
     <!--
@@ -166,7 +166,7 @@ function clearForm(myFormElement) {
                 </table>
               </td>
               <td>
-                <table>
+                <table class='table'>
                     <tr><td><label for='id_domhndsh'>{{searchform.domhndsh.label}}</label></td><td>{{searchform.domhndsh}}</td></tr>
                     <tr><td><label for='id_subhndsh'>{{searchform.subhndsh.label}}</label></td><td>{{searchform.subhndsh}}</td></tr>
                     <tr><td><label for='id_locprim'>{{searchform.locprim.label}}</label></td><td>{{searchform.locprim}}</td></tr>
