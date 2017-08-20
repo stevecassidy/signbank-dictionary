@@ -201,7 +201,6 @@ def word(request, keyword, n):
     searchall = request.user.has_perm('dictionary.search_gloss')
     preferdialect = None
     if 'region' in request.session:
-        print("REGION", request.session['region'])
         preferdialect = Dialect.objects.get(id=request.session['region'])
 
 

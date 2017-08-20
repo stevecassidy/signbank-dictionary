@@ -64,8 +64,6 @@ class Keyword(models.Model):
         Returns a tuple (translation, count) where count is the total number
         of matches."""
 
-        print("MR", n, searchall, safe, preferdialect)
-
         if searchall:
             alltrans = self.translation_set.all()
         else:
@@ -97,7 +95,6 @@ class Keyword(models.Model):
         if preferdialect is not None:
             # pull any gloss with the preferred dialect to the
             # front of the list
-            print("preferring dialect", preferdialect)
             newtrans= []
             for trans in alltrans:
                 if trans.gloss.region_set.filter(dialect__exact=preferdialect).count() > 0:
