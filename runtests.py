@@ -27,7 +27,6 @@ try:
             "feedback"
         ],
         SITE_ID=1,
-        MIDDLEWARE_CLASSES=(),
 
         FIXTURE_DIRS = [os.path.join(BASE_DIR, 'tests', 'fixtures')],
 
@@ -70,8 +69,8 @@ try:
         ALWAYS_REQUIRE_LOGIN = True,
         ANON_SAFE_SEARCH = False,
         QUICK_UPDATE_GLOSS_FIELDS = ['language', 'dialect'],
-        VIDEO_UPLOAD_LOCATION = '/tmp',
-        GLOSS_VIDEO_DIRECTORY = '/tmp',
+        VIDEO_UPLOAD_LOCATION = 'tmp',
+        GLOSS_VIDEO_DIRECTORY = 'tmp',
         SHOW_TRADITIONAL = True,
         SHOW_FREQUENCY = True,
         ADMIN_RESULT_FIELDS = ['sn', 'idgloss', 'annotation_idgloss', 'morph'],
