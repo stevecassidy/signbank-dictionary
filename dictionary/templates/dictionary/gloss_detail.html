@@ -46,9 +46,17 @@
       var button = $(event.relatedTarget);
       var definitionid = button.data('definitionid');
       var modal = $(this);
-      modal.find('.modal-title').text('Upload Video Definition for ' + definitionid);
       modal.find('#id_tag').val(definitionid);
     })
+
+    $('#defnVideoRemoveModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var definitionid = button.data('definitionid');
+      var modal = $(this);
+      var form = modal.find('form');
+      form.attr('action', '/video/delete/Definition/'+definitionid+'/');
+    })
+
     </script>
 
     {% endif %}
@@ -553,19 +561,19 @@
                    <h2 id='dvrmodalTitle'>Delete Definition Video</h2>
                </div>
                <div class='modal-body'>
-                   <p>This action will delete the video
-                       associated with this definition.
-                       It cannot be undone.</p>
-                </div>
-
-           </div>
-         </div>
-   </div>
+                <form action="{% url 'video:delete' category='Definition' tag=0 %}" method='post'>
+                    {% csrf_token %}
+                    <tr><td><em>This will delete the video for this definition. This operation cannot be undone.</em></td></tr>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <input type="submit" class="btn btn-danger" value='Confirm Delete'>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
     </div>
-
     </div>
-
-
     </div>
 </div>
 
