@@ -28,6 +28,7 @@ $(document).ready(function() {
         <div class='col-md-3'>
           <div class="panel">
               <div class="panel-body">
+                <!--
                   <form role="search" id="mainSearch" name="mainSearch" method="get" action="{% url 'dictionary:search' %}">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="keywords" name="query" value="{{ query }}" >
@@ -41,13 +42,19 @@ $(document).ready(function() {
                     <h4>Category</h4>
                     {{searchform.category}}
                   </form>
-
                   <hr>
+                  -->
                   <p>Search for a sign using an English keyword in the search box
                    or browse keywords starting with any letter.  Limit search
-               to a category of signs by selecting from the list of topics above.</p>
+               to a category of signs by selecting from the list of topics.</p>
 
-               <form id='setregionform' action="{% url 'dictionary:set_region' %}" method="POST">
+                <hr>
+
+                <p>The dialect setting determines the ordering of signs shown for
+                  keyword matches.  The preferred dialect will be shown first
+                  if there are multiple signs matching a keyword.</p>
+
+                <form id='setregionform' action="{% url 'dictionary:set_region' %}" method="POST">
                    {% csrf_token %}
                    {# {{regionform}} #}
 
@@ -62,9 +69,6 @@ $(document).ready(function() {
                    </select>
 
                </form>
-               <p>The dialect setting determines the ordering of signs shown for
-                   keyword matches.  The preferred dialect will be shown first
-                   if there are multiple signs matching a keyword.</p>
 
               </div>
           </div>

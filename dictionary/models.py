@@ -472,7 +472,6 @@ minor or insignificant ways that can be ignored.""")
     def get_absolute_url(self):
         return "/dictionary/gloss/%s.html" % self.idgloss
 
-
     def homophones(self):
         """Return the set of homophones for this gloss ordered by sense number"""
 
@@ -489,11 +488,11 @@ minor or insignificant ways that can be ignored.""")
                 return root.homophones()
         return []
 
-
     def get_video_gloss(self):
         """Work out the gloss that might have the video for this sign, usually the sign number but
         if we're a sense>1 then we look at the homophone with sense=1
         Return the gloss instance."""
+
         if self.sense is not None and self.sense > 1:
             homophones = self.relation_sources.filter(role=Relationrole.objects.get(role="homophone"), target__sense__exact=1)
             # should be only zero or one of these
