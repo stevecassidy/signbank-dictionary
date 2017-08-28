@@ -19,8 +19,8 @@
                     <a href="#" data-toggle="modal"
                                 data-target="#variant-modal"
                                 data-idgloss="{{thumbnail.idgloss}}"
-                                onmouseover="replay('{{thumbnail.idgloss}}')">
-                        {% videoplayer id=thumbnail.idgloss category='Gloss' tag=thumbnail.pk width=120 height=90 %}
+                                onmouseover="replay('{{thumbnail.idgloss|slugify}}')">
+                        {% videoplayer id=thumbnail.idgloss category='Gloss' tag=thumbnail.gloss.get_video_gloss.pk width=120 height=90 %}
                     </a>
                 </li>
             {% endfor %}

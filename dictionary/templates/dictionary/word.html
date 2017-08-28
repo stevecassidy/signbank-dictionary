@@ -155,7 +155,7 @@
             <div class='col-md-4'>
                 <div id="videocontainer">
                    <div id="player">
-                       {% videoplayer id='signvideo' category='Gloss' tag=gloss.pk width=308 height=250 %}
+                       {% videoplayer id='signvideo' category='Gloss' tag=gloss.get_video_gloss.pk width=308 height=250 %}
                    </div>
                 </div>
 
@@ -205,17 +205,18 @@
                                   </div>
                                   <ol>
                                       {% for def in role.list %}
-                                        <li><div class="definition">
-                                            {% if def.video %}
-                                            <div style='float:right; margin-left: 10px;'>
-                                            {% thumbnail_popup id=def.video.tag category='Definition' tag=def.id width=600 height=400 %}
-                                            </div>
-                                            {% endif %}
+                                        <li class="definition row">
+                                          <div  style="margin-top: -1.4em">
+                                              {% if def.video %}
+                                              <div class="col-sm-7 col-xs-12">{{def.text}}</div>
 
-                                              <div class="definitiontext">
-                                                <p>{{def.text}}</p>
+                                              <div class="col-sm-1 col-xs-12">
+                                                {% thumbnail_popup id=def.video.tag category='Definition' tag=def.id width=600 height=400 %}
                                               </div>
-                                            </div>
+                                              {% else %}
+                                              <div style="margin-top: -1.4em; margin-bottom: 1.4em;">{{def.text}}</div>
+                                              {% endif %}
+                                          </div>
                                         </li>
                                       {% endfor %}
                                     </ol>

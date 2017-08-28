@@ -172,14 +172,17 @@ def get_variant_thumbnails(request, gloss):
     if request.user.has_perm('dictionary.search_gloss'):
         variants = [relation.target for relation in variant_relations]
     else:
-        variants = [relation.target for relation in variant_relations if relation.target.inWeb == True]
+        variants = [relation.target for relation in variant_relations
+                    if relation.target.inWeb]
 
     if len(variants) > 0:
         thumbnails = []
         for variant in variants:
-            thumbnail = {}
-            thumbnail['pk'] = variant.pk
-            thumbnail['idgloss'] = variant.idgloss
+            thumbnail = {
+                'pk': variant.pk,
+                'idgloss': variant.idgloss,
+                'gloss': variant
+            }
             thumbnails.append(thumbnail)
 
     return thumbnails
