@@ -58,7 +58,7 @@
           var button = $(event.relatedTarget) // Button that triggered the modal
           var idgloss = button.data('idgloss') // Extract info from data-* attributes
 
-          $( "#variant-container" ).load( "{% url 'root_page' %}dictionary/variant/" + idgloss + ".html",
+          $( "#variant-container" ).load( "/dictionary/variant/" + idgloss + ".html",
           		function() {
                     // initialise video player instance
                     if ($('#variantsignvideo').length) {
