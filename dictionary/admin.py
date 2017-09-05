@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 from reversion.admin import VersionAdmin
-from tagging.models import TaggedItem
+
 
 class KeywordAdmin(VersionAdmin):
     search_fields = ['^text']
@@ -27,6 +27,7 @@ class RelationInline(admin.TabularInline):
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin import SimpleListFilter
+
 
 class SenseNumberListFilter(SimpleListFilter):
     # Human-readable title which will be displayed in the
@@ -60,9 +61,11 @@ class SenseNumberListFilter(SimpleListFilter):
         if self.value() == 'morethanone':
             return queryset.filter(sense__gte=1)
 
+
 class RegionInline(admin.TabularInline):
     model = Gloss.dialect.through
     verbose_name_plural = "Regional information on dialects"
+
 
 class GlossAdmin(VersionAdmin):
     fieldsets = ((None, {'fields': ('idgloss', 'annotation_idgloss', 'morph', 'sense',
@@ -88,16 +91,20 @@ class RegistrationProfileAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'activation_key_expired', )
     search_fields = ('user__username', 'user__first_name', )
 
+
 class DialectInline(admin.TabularInline):
     model = Dialect
+
 
 class DialectAdmin(VersionAdmin):
     model = Dialect
     list_display = ['name', 'index', 'language']
 
+
 class LanguageAdmin(VersionAdmin):
     model = Language
     inlines = [DialectInline]
+
 
 admin.site.register(Dialect, DialectAdmin)
 admin.site.register(Language, LanguageAdmin)
