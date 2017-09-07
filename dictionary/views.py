@@ -448,8 +448,12 @@ def search(request):
                 words = words.order_by(Lower('text'))
             else:
                 # might fail if category doesn't exist
-                tag = Tag.objects.get(name=category)
-                glosses = TaggedItem.objects.get_by_model(Gloss, tag)
+                try:
+                    tag = Tag.objects.get(name=category)
+                    glosses = TaggedItem.objects.get_by_model(Gloss, tag)
+                except DoesNotExist: 
+                    glosses = glosses.objects.all()
+                    
                 if request.user.has_perm('dictionary.search_gloss'):
                     glosses = glosses.filter(translation__translation__text__istartswith=term)
                 else:
