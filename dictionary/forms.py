@@ -6,9 +6,6 @@ from tagging.models import Tag
 
 CATEGORY_CHOICES = getattr(settings, 'DICTIONARY_FILTER_TAGS', [])
 # remove any tags that aren't tags
-for t in CATEGORY_CHOICES:
-    print(t, Tag.objects.filter(name=t[0]).count())
-
 CATEGORY_CHOICES = [t for t in CATEGORY_CHOICES if Tag.objects.filter(name=t[0]).count() == 1]
 CATEGORY_CHOICES.insert(0, ('all', 'All'))
 

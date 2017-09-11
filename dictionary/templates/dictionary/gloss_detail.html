@@ -370,7 +370,7 @@
                    {% for rel in gloss.relation_targets.all %}
                     <tr>
                          <td>
-                            <span class='glyphicon glyphicon-trash relation_delete' data-toggle='modal' data-target='#delete_relation_modal_{{rel.id}}'></span>
+                            <span class='glyphicon glyphicon-trash editable relation_delete' data-toggle='modal' data-target='#delete_relation_modal_{{rel.id}}'></span>
 
                              <div class="modal fade" id="delete_relation_modal_{{rel.id}}" role="dialog" aria-labelledby="#modalTitle" aria-hidden="true">
                                  <div class="modal-dialog modal-sm">
