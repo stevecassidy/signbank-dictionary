@@ -234,6 +234,7 @@ def update_region(gloss, field, value):
 
     return HttpResponse(value, {'content-type': 'text/plain'})
 
+
 def update_relation(gloss, field, value):
     """Update one of the relations for this gloss"""
 
@@ -242,7 +243,7 @@ def update_relation(gloss, field, value):
     try:
         rel = Relation.objects.get(id=relid)
     except:
-        return HttpResponseBadRequest("Bad Relation ID '%s'" % defid, {'content-type': 'text/plain'})
+        return HttpResponseBadRequest("Bad Relation ID '%s'" % relid, {'content-type': 'text/plain'})
 
     """if not rel.source == gloss:
         return HttpResponseBadRequest("Relation doesn't match gloss", {'content-type': 'text/plain'})
