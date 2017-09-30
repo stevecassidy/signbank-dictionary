@@ -421,6 +421,13 @@ def search(request):
         term = form.cleaned_data['query']
         category = form.cleaned_data['category']
 
+        # guard against nulls in query string that causes a crash with Postgres
+        # no reason for this in a genuine query so probably a hacking attempt
+        if '\x00' in term:
+            term = ''
+        if '\x00' in category:
+            category = ''
+
         if term == '' and category in ['', 'all']:
             words = []
         else:
@@ -451,9 +458,9 @@ def search(request):
                 try:
                     tag = Tag.objects.get(name=category)
                     glosses = TaggedItem.objects.get_by_model(Gloss, tag)
-                except DoesNotExist: 
+                except DoesNotExist:
                     glosses = glosses.objects.all()
-                    
+
                 if request.user.has_perm('dictionary.search_gloss'):
                     glosses = glosses.filter(translation__translation__text__istartswith=term)
                 else:
