@@ -134,7 +134,6 @@ class Definition(models.Model):
         list_filter = ['role']
         search_fields = ['gloss__idgloss']
 
-
     def video(self):
         """Return the video object for this definition or None if no video available"""
 
@@ -538,17 +537,29 @@ minor or insignificant ways that can be ignored.""")
     def has_video(self):
         """Test to see if the video for this sign is present"""
 
-        return self.get_video() != None
+        return self.get_video() is not None
 
     def published_definitions(self):
-        """Return a query set of just the published definitions for this gloss
-        also filter out those fields not in DEFINITION_FIELDS"""
+        """Return a list of definitions for this gloss in a form
+         useable in the page template.  Only definitions in settings.DEFINITION_FIELDS
+         are included, the list contains dictionaries with keys
+         'type', 'video' and 'definitions'
+         """
 
+        result = []
+        for dtype in settings.DEFINITION_FIELDS:
+            defs = self.definition_set.filter(published__exact=True, role__exact=dtype)
 
-        defs = self.definition_set.filter(published__exact=True)
+            if len(defs) > 0:
+                videos = [d.video() for d in defs if d.video()]
+                result.append({
+                                    'type': dtype,
+                                    'hasvideo': any(videos),
+                                    'video': videos,
+                                    'definitions': defs
+                              })
 
-        return [d for d in defs if d.role in settings.DEFINITION_FIELDS]
-
+        return result
 
     def definitions(self):
         """gather together the definitions for this gloss"""
@@ -561,7 +572,6 @@ minor or insignificant ways that can be ignored.""")
             defs[d.role].append(d.text)
         return defs
 
-
     def options_to_json(self, options):
         """Convert an options list to a json dict"""
 
@@ -571,7 +581,6 @@ minor or insignificant ways that can be ignored.""")
         """Return JSON for the handshape choice list"""
 
         return self.options_to_json(handshapeChoices)
-
 
     def location_choices_json(self):
         """Return JSON for the location choice list"""
@@ -592,7 +601,6 @@ minor or insignificant ways that can be ignored.""")
         """Return JSON for the secondary location (BSL) choice list"""
 
         return self.options_to_json(BSLsecondLocationChoices)
-
 
     def definition_role_choices_json(self):
         """Return JSON for the definition role choice list"""
