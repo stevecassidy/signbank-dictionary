@@ -138,6 +138,17 @@ def update_gloss(request, glossid):
             else:
                 newvalue = 'No'
 
+        elif field == 'isNew':
+            # only modify if we have publish permission
+            if request.user.has_perm('dictionary.can_publish'):
+                gloss.isNew = (value == 'Yes')
+                gloss.save()
+
+            if gloss.isNew:
+                newvalue = 'Yes'
+            else:
+                newvalue = 'No'
+
         else:
 
             if not field in [f.name for f in Gloss._meta.get_fields()]:
