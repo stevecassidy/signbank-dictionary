@@ -87,7 +87,7 @@
     </div>
 
     {% if gloss.idgloss %}
-    <a class='btn btn-default navbar-btn' href="{% url 'dictionary:gloss' idgloss=gloss.idgloss %}">Public View</a>
+    <a class='btn btn-default navbar-btn' href="{% url 'dictionary:gloss' idgloss=gloss.idgloss %}">Go to Public View</a>
     {% endif %}
 
     {% if perms.dictionary.change_gloss %}

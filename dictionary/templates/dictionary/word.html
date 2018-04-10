@@ -144,14 +144,14 @@
 
         <div class='btn-group'>
            {% if perms.dictionary.search_gloss %}
-           <a id='editbutton' class='btn btn-default navbar-btn' href="{% url 'dictionary:admin_gloss_view' pk=gloss.id %}">Detail View</a>
+           <a id='editbutton' class='btn btn-default navbar-btn' href="{% url 'dictionary:admin_gloss_view' pk=gloss.id %}">Go to Detail View</a>
            {% endif %}
         </div>
 
     </div>
 
     <div id="definitionblock">
-    	  <div>
+    	  <div class="row">
             <div class='col-md-4'>
                 <div id="videocontainer">
                    <div id="player">
@@ -201,31 +201,23 @@
                               <div class='panel-heading'>
                                 <h3 class='panel-title'>{{definition.definitions.0.get_role_display}}</h3>
                               </div>
-                              <div class="row">
-                                {% if definition.hasvideo %}
-                                <div class="col-md-8">
-                                  <ol>
+                              <div>
                                       {% for def in definition.definitions %}
-                                        <li class="definition">{{def.text}}</li>
+                                        <div class="row definition-entry">
+                                          {% if def.video %}
+                                          <div class="col-md-8">
+                                            <span class="definition-counter">{{forloop.counter}}.</span> {{def.text}}
+                                          </div>
+                                          <div class="col-md-4">
+                                          {% thumbnail_popup id=def.video.tag category='Definition' tag=def.id width=600 height=400 %}
+                                          </div>
+                                          {% else %}
+                                          <div class="col-md-12">
+                                            <span class="definition-counter">{{forloop.counter}}.</span> {{def.text}}
+                                          </div>
+                                          {% endif %}
+                                        </div>
                                       {% endfor %}
-                                  </ol>
-                                </div>
-                                <div class="col-md-4">
-                                  {% for def in definition.definitions %}
-                                    {% if def.video %}
-                                      {% thumbnail_popup id=def.video.tag category='Definition' tag=def.id width=600 height=400 %}
-                                    {% endif %}
-                                  {% endfor %}
-                                </div>
-                                {% else %}
-                                <div class="col-md-12">
-                                  <ol>
-                                    {% for def in definition.definitions %}
-                                    <li class="definition">{{def.text}}</li>
-                                    {% endfor %}
-                                  </ol>
-                                </div>
-                                {% endif %}
                               </div>
                           </div>
 
@@ -236,62 +228,62 @@
         </div>
 
         {% if regional_template_content %}
-        <div  class='col-md-12'>
+        <div class='col-md-12'>
           {{ regional_template_content }}
         </div>
         {% endif %}
 
         <div class='col-md-4 region-left'>
 
-    <div id="feedback">
-            <ul>
-                {% ifequal viewname "words" %}
-                <li><a href="{% url 'feedback:wordfeedback' keyword=translation.translation n=n %}?return=/dictionary/words/{{translation.translation}}-{{n}}.html">Provide feedback about this sign</a></li>
-                {% else %}
-                <li><a href="{% url 'feedback:glossfeedback' n=gloss.pk %}?return=/dictionary/gloss/{{gloss.idgloss}}.html&lastmatch={{lastmatch}}">Provide feedback about this sign</a></li>
-                {% endifequal %}
+          <div id="feedback">
+              <ul>
+                  {% ifequal viewname "words" %}
+                  <li><a href="{% url 'feedback:wordfeedback' keyword=translation.translation n=n %}?return=/dictionary/words/{{translation.translation}}-{{n}}.html">Provide feedback about this sign</a></li>
+                  {% else %}
+                  <li><a href="{% url 'feedback:glossfeedback' n=gloss.pk %}?return=/dictionary/gloss/{{gloss.idgloss}}.html&lastmatch={{lastmatch}}">Provide feedback about this sign</a></li>
+                  {% endifequal %}
 
-                <li><a href="{% url 'feedback:missingsign' %}">Report a missing sign</a></li>
-                <li><a href="{% url 'feedback:generalfeedback' %}">Provide general site feedback</a></li>
-            </ul>
-        </div>
+                  <li><a href="{% url 'feedback:missingsign' %}">Report a missing sign</a></li>
+                  <li><a href="{% url 'feedback:generalfeedback' %}">Provide general site feedback</a></li>
+              </ul>
+          </div>
 
-            <div>
-                {% if regions|length > 0 %}
-                <div id="states">
-                    <div>
-                    {% for image in dialect_image %}
-                        <img src="{% static image %}" alt="Region">
+          <div>
+              {% if regions|length > 0 %}
+              <div id="states">
+                  <div>
+                  {% for image in dialect_image %}
+                      <img src="{% static image %}" alt="Region">
+                  {% endfor %}
+                  </div>
+              </div>
+
+              <div>
+                  <h4>Sign Distribution</h4>
+                  {% if perms.dictionary.search_gloss %}
+                  <table class="table table-condensed">
+                    {% for region in regions %}
+                    <tr>
+                      <td>
+                        {{ region.dialect.name }}
+                      </td>
+                      {% if SETTINGS_SHOW_TRADITIONAL %}
+                      <td>
+                        {{ region.traditional|yesno:" traditional," }}
+                      </td>
+                      {% endif %}
+                      {% if SETTINGS_SHOW_FREQUENCY %}
+                      <td>
+                          {{ region.frequency }}
+                      </td>
+                      {% endif %}
+                    </tr>
                     {% endfor %}
-                    </div>
-                </div>
-
-                <div>
-                    <h4>Sign Distribution</h4>
-                    {% if perms.dictionary.search_gloss %}
-                    <table class="table table-condensed">
-                      {% for region in regions %}
-                      <tr>
-                        <td>
-                          {{ region.dialect.name }}
-                        </td>
-                        {% if SETTINGS_SHOW_TRADITIONAL %}
-                        <td>
-                          {{ region.traditional|yesno:" traditional," }}
-                        </td>
-                        {% endif %}
-                        {% if SETTINGS_SHOW_FREQUENCY %}
-                        <td>
-                            {{ region.frequency }}
-                        </td>
-                        {% endif %}
-                      </tr>
-                      {% endfor %}
-                    </table>
-                    {% endif %}
-                </div>
-                {% endif %}
-            </div>
+                  </table>
+                  {% endif %}
+              </div>
+              {% endif %}
+          </div>
         </div>
 
     </div>
