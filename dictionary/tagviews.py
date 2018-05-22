@@ -1,7 +1,6 @@
 
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from django.template import RequestContext
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 
@@ -50,22 +49,21 @@ def taglist(request, tag=None):
 
 
 
-        return render_to_response('dictionary/gloss_list.html',
-                                  {'paginator': paginator,
-                                   'page': result_page,
-                                   'thistag': taginfo,
-                                   'tagdict': tag_dict()},
-                                   context_instance=RequestContext(request) )
+        return render(request, 'dictionary/gloss_list.html',
+                      {'paginator': paginator,
+                       'page': result_page,
+                       'thistag': taginfo,
+                       'tagdict': tag_dict()})
     else:
-        return render_to_response('dictionary/gloss_list.html',
-                                  {'tagdict': tag_dict(),
-                                   },
-                                   context_instance=RequestContext(request))
+        return render(request, 'dictionary/gloss_list.html',
+                      {'tagdict': tag_dict()})
 
 
 def tag_dict():
     """Generate a dictionary of tags categorised by their
-    category (the part before the colon)"""
+    category (the part before the colon)
+    Returns a dictionary with categories as keys and
+    each value being a list of tuples (tagname, count, fulltagname)"""
 
     tags = Tag.objects.usage_for_model(Gloss, counts=True)
     # build a dictionary of tags under their categories
@@ -78,8 +76,8 @@ def tag_dict():
             tagname = tag.name
 
         if cat in cats:
-            cats[cat].append((tagname, tag.count))
+            cats[cat].append((tagname, tag.count, tag.name))
         else:
-            cats[cat] = [(tagname, tag.count)]
+            cats[cat] = [(tagname, tag.count, tag.name)]
 
     return cats

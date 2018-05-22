@@ -8,7 +8,7 @@
    <strong>{{cat}}</strong>
     {% for tag in tags %}
       <div class='tag' {% if tag.0 == thistag.1 and cat == thistag.0 %}id='activetag'{% endif %}>
-        <span class='tagname'><a href="{% url 'tag' tag=cat + ':' + tag.0 %}">{{tag.0}}</a></span>
+        <span class='tagname'><a href="{% url 'dictionary:tag' tag=tag.2 %}">{{tag.0}}</a></span>
         <span class='tagcount'>{{tag.1}}</span>
       </div>
     {% endfor %}
