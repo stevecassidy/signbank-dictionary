@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block content %}
-
-<div id='tags'>
+<div class="container">
+<div class='row' id='tags'>
   {% for cat, tags in tagdict.items %}
-   <strong>{{cat}}</strong>
+  <div class='tag'><strong>{{cat}}</strong></div>
     {% for tag in tags %}
       <div class='tag' {% if tag.0 == thistag.1 and cat == thistag.0 %}id='activetag'{% endif %}>
         <span class='tagname'><a href="{% url 'dictionary:tag' tag=tag.2 %}">{{tag.0}}</a></span>
@@ -15,6 +15,7 @@
   {% endfor %}
 </div>
 
+  <div class="row">
         <p>Items marked * below are not in the web version of the dictionary and would not
         appear in a regular (public) search.</p>
 
@@ -51,4 +52,6 @@
           </p>
 
           {% endif %}
+      </div>
+  </div>
 {% endblock %}
