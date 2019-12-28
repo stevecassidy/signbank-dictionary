@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.core.urlresolvers import resolve
+from django.urls import resolve
 
 from dictionary.views import search, word, gloss
 

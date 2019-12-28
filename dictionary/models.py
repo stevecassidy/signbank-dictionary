@@ -20,8 +20,8 @@ import json
 class Translation(models.Model):
     """An English translations of Auslan glosses"""
 
-    gloss = models.ForeignKey("Gloss")
-    translation = models.ForeignKey("Keyword")
+    gloss = models.ForeignKey("Gloss", on_delete=models.CASCADE)
+    translation = models.ForeignKey("Keyword", on_delete=models.CASCADE)
     index = models.IntegerField("Index")
 
     def __str__(self):
@@ -73,7 +73,7 @@ class Keyword(models.Model):
         rewisedtrans = list(alltrans)
         for trans in alltrans:
             target = Relation.objects.filter(target=trans.gloss,
-                                             role=Relationrole.objects.filter(role="variant")).all()
+                                             role__in=Relationrole.objects.filter(role="variant")).all()
             if target:
                 rewisedtrans.remove(trans)
         alltrans = rewisedtrans
@@ -120,7 +120,7 @@ class Definition(models.Model):
     def __str__(self):
         return str(self.gloss)+"/"+self.role
 
-    gloss = models.ForeignKey("Gloss")
+    gloss = models.ForeignKey("Gloss", on_delete=models.CASCADE)
     text = models.TextField(blank=True)
     role = models.CharField(max_length=20, choices=defn_role_choices)
     count = models.IntegerField()
@@ -160,7 +160,7 @@ class Dialect(models.Model):
     class Meta:
         ordering = ['index', 'language', 'name']
 
-    language = models.ForeignKey(Language)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
     description = models.TextField(blank=True)
     # index field defines an ordering over dialects
@@ -175,8 +175,8 @@ class Region(models.Model):
     class Meta:
         ordering = ['gloss', 'dialect', 'frequency', 'traditional']
 
-    gloss = models.ForeignKey('Gloss')
-    dialect = models.ForeignKey(Dialect)
+    gloss = models.ForeignKey('Gloss', on_delete=models.CASCADE)
+    dialect = models.ForeignKey(Dialect, on_delete=models.CASCADE)
     frequency = models.TextField()
     traditional = models.BooleanField(default=False)
 
@@ -660,9 +660,9 @@ class Relationrole(models.Model):
 class Relation(models.Model):
     """A relation between two glosses"""
 
-    source = models.ForeignKey(Gloss, related_name="relation_sources")
-    target = models.ForeignKey(Gloss, related_name="relation_targets")
-    role = models.ForeignKey(Relationrole, related_name="relations")
+    source = models.ForeignKey(Gloss, related_name="relation_sources", on_delete=models.CASCADE)
+    target = models.ForeignKey(Gloss, related_name="relation_targets", on_delete=models.CASCADE)
+    role = models.ForeignKey(Relationrole, related_name="relations", on_delete=models.CASCADE)
                 # antonym, synonym, cf (what's this? - see also), var[b-f]
                                # (what's this - variant (XXXa is the stem, XXXb is a variant)
 

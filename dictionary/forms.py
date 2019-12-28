@@ -1,4 +1,5 @@
 from django import forms
+import django
 from .models import Dialect, Gloss, Definition, Relation, Region, defn_role_choices,\
     Relationrole
 from django.conf import settings
@@ -6,7 +7,10 @@ from tagging.models import Tag
 
 CATEGORY_CHOICES = getattr(settings, 'DICTIONARY_FILTER_TAGS', [])
 # remove any tags that aren't tags
-CATEGORY_CHOICES = [t for t in CATEGORY_CHOICES if Tag.objects.filter(name=t[0]).count() == 1]
+try:
+    CATEGORY_CHOICES = [t for t in CATEGORY_CHOICES if Tag.objects.filter(name=t[0]).count() == 1]
+except django.db.utils.OperationalError:
+    pass
 CATEGORY_CHOICES.insert(0, ('all', 'All'))
 
 class UserSignSearchForm(forms.Form):

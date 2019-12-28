@@ -200,7 +200,7 @@ def word(request, keyword, n):
     word = get_object_or_404(Keyword, text=keyword)
 
     # returns (matching translation, number of matches)
-    safe = (not request.user.is_authenticated()) and settings.ANON_SAFE_SEARCH
+    safe = not request.user.is_authenticated and settings.ANON_SAFE_SEARCH
     searchall = request.user.has_perm('dictionary.search_gloss')
     preferdialect = None
     if 'region' in request.session:
@@ -433,7 +433,7 @@ def search(request):
         else:
 
             # safe search for authenticated users if the setting says so
-            safe = (not request.user.is_authenticated()) and settings.ANON_SAFE_SEARCH
+            safe = not request.user.is_authenticated and settings.ANON_SAFE_SEARCH
 
             try:
                 term = smart_unicode(term)

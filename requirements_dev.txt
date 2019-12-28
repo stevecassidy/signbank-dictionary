@@ -1,4 +1,7 @@
-bumpversion==0.5.3
-wheel==0.29.0
-django>=1.9.6
-tox
+-r requirements.txt
+
+# Additional test requirements go here
+coverage
+mock>=1.0.1
+flake8>=2.1.0
+tox>=1.7.0
