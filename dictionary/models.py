@@ -377,11 +377,11 @@ minor or insignificant ways that can be ignored.""")
 
     # Phonology fields
 
-    domhndsh = models.CharField("Initial Dominant Handshape", blank=True,  null=True, choices=handshapeChoices, max_length=5)
-    subhndsh = models.CharField("Initial Subordinate Handshape", null=True, choices=handshapeChoices, blank=True, max_length=5)
+    domhndsh = models.CharField("Initial Dominant Handshape", blank=True,  null=True, choices=handshapeChoices, max_length=10)
+    subhndsh = models.CharField("Initial Subordinate Handshape", null=True, choices=handshapeChoices, blank=True, max_length=10)
 
-    final_domhndsh = models.CharField("Final Dominant Handshape", blank=True,  null=True, choices=handshapeChoices, max_length=5)
-    final_subhndsh = models.CharField("Final Subordinate Handshape", null=True, choices=handshapeChoices, blank=True, max_length=5)
+    final_domhndsh = models.CharField("Final Dominant Handshape", blank=True,  null=True, choices=handshapeChoices, max_length=10)
+    final_subhndsh = models.CharField("Final Subordinate Handshape", null=True, choices=handshapeChoices, blank=True, max_length=10)
 
     locprim = models.IntegerField("Initial Primary Location", choices=locationChoices, null=True, blank=True)
     final_loc = models.IntegerField("Final Primary Location", choices=locationChoices, null=True, blank=True)

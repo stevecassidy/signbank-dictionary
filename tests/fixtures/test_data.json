@@ -246,33 +246,48 @@
         }
     },
     {
+        "model": "dictionary.relationrole",
         "pk": 1,
-        "model": "dictionary.dialect",
         "fields": {
-            "name": "Tasmania",
-            "language": 1,
-            "index": 4,
-            "description": ""
+          "role": "variant",
+          "forwardmessage": "Has Variant",
+          "backwardmessage": "Is Variant Of"
         }
-    },
-    {
+      },
+      {
+        "model": "dictionary.relationrole",
         "pk": 2,
-        "model": "dictionary.dialect",
         "fields": {
-            "name": "Victoria",
-            "language": 1,
-            "index": 4,
-            "description": ""
+          "role": "antonym",
+          "forwardmessage": "Antonym",
+          "backwardmessage": "Antonym"
         }
-    },
-    {
+      },
+      {
+        "model": "dictionary.relationrole",
         "pk": 3,
-        "model": "dictionary.dialect",
         "fields": {
-            "name": "Western Australia",
-            "language": 1,
-            "index": 4,
-            "description": ""
+          "role": "synonym",
+          "forwardmessage": "Synonym",
+          "backwardmessage": "Synonym"
         }
-    }
+      },
+      {
+        "model": "dictionary.relationrole",
+        "pk": 4,
+        "fields": {
+          "role": "seealso",
+          "forwardmessage": "See Also",
+          "backwardmessage": "See Also"
+        }
+      },
+      {
+        "model": "dictionary.relationrole",
+        "pk": 5,
+        "fields": {
+          "role": "homophone",
+          "forwardmessage": "Homophone",
+          "backwardmessage": "Homophone"
+        }
+      }
  ]

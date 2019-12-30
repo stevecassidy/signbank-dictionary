@@ -9,11 +9,11 @@ from django.db.models import Max
 
 from dictionary.views import (search, remove_crude_words,
     remove_words_not_belonging_to_category, paginate, word,
-    get_gloss_position, gloss)
+    get_gloss_position, gloss, variant)
 from dictionary.models import Keyword, Gloss
 
 
-def create_request(url=None, method='GET', data=None, permission=None, logged_in=True):
+def create_request(url=None, method='GET', data=None, permission=None, logged_in=True, region=None):
     '''
     This function returns one of various kinds of requests. The kind
     of request that this function returns depends on the parametres
@@ -34,7 +34,11 @@ def create_request(url=None, method='GET', data=None, permission=None, logged_in
         request = factory.post(url, data)
     else:
         raise ValueError("%s is an unrecognised method. It must be one of 'post' or 'get'"%(method))
-    setattr(request, 'session', 'session')
+    if region:
+        setattr(request, 'session', {'region': region})
+    else:
+        setattr(request, 'session', 'session')
+
     messages = FallbackStorage(request)
     setattr(request, '_messages', messages)
     request.user = user
@@ -422,3 +426,42 @@ class Glossview(TestCase):
         non_existent_idgloss = 'ZZZ890'
         request = create_request()
         self.assertRaises(Http404, gloss, request, non_existent_idgloss)
+
+
+class VariantView(TestCase):
+    fixtures = ["test_data.json"]
+
+    def setUp(self):
+        # An idgloss that exists in the fixture...
+        self.idgloss = 'Aborigine1'
+        self.login_url = '/accounts/login/?next=/None'
+
+    def test_gloss_not_inWeb_and_user_not_admin(self):
+        '''
+        '''
+        # Let's get a gloss that isn't inWeb
+        gloss_not_inWeb = Gloss.objects.filter(inWeb=False)[0]
+        request = create_request(method='get')
+        # doesn't raise a 404, 
+        #self.assertRaises(Http404, variant, request, gloss_not_inWeb.idgloss)
+        with self.assertTemplateUsed('dictionary/variant.html'):
+                response = variant(request, gloss_not_inWeb.idgloss)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_gloss_variant_view(self):
+        """ """
+        thegloss = Gloss.objects.filter()[0]
+        request=create_request(method='get')
+        with self.assertTemplateUsed('dictionary/variant.html'):
+                response = variant(request, thegloss.idgloss)
+        self.assertEqual(response.status_code, 200)
+
+    def test_gloss_does_not_exist(self):
+        '''
+        If a gloss that doesn't exist is passed to the
+        gloss view, then 404 should be returned.
+        '''
+        non_existent_idgloss = 'ZZZ890'
+        request = create_request()
+        self.assertRaises(Http404, variant, request, non_existent_idgloss)

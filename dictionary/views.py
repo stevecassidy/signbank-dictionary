@@ -84,13 +84,9 @@ def map_image_for_regions(regions):
 
 def variant(request, idgloss):
 
-    if 'feedbackmessage' in request.GET:
-        feedbackmessage = request.GET['feedbackmessage']
-    else:
-        feedbackmessage = False
-
-    gloss = Gloss.objects.filter(idgloss=idgloss)[0]
-
+   # gloss = Gloss.objects.filter(idgloss=idgloss)[0]
+    gloss = get_object_or_404(Gloss, idgloss=idgloss)
+    
     # and all the keywords associated with this sign
     allkwds = gloss.translation_set.all()
 
@@ -151,7 +147,6 @@ def variant(request, idgloss):
                                'glosscount': glosscount,
                                'glossposn': glossposn,
                                'feedback' : True,
-                               'feedbackmessage': feedbackmessage,
                                'tagform': TagUpdateForm(),
                                'SIGN_NAVIGATION' : settings.SIGN_NAVIGATION,
                                'SETTINGS_SHOW_TRADITIONAL' : settings.SHOW_TRADITIONAL,
@@ -191,11 +186,6 @@ def word(request, keyword, n):
     """View of a single keyword that may have more than one sign"""
 
     n = int(n)
-
-    if 'feedbackmessage' in request.GET:
-        feedbackmessage = request.GET['feedbackmessage']
-    else:
-        feedbackmessage = False
 
     word = get_object_or_404(Keyword, text=keyword)
 
@@ -268,7 +258,6 @@ def word(request, keyword, n):
              'glosscount': glosscount,
              'glossposn': glossposn,
              'feedback' : True,
-             'feedbackmessage': feedbackmessage,
              'tagform': TagUpdateForm(),
              'SIGN_NAVIGATION' : settings.SIGN_NAVIGATION,
              'SETTINGS_SHOW_TRADITIONAL' : settings.SHOW_TRADITIONAL,
@@ -282,11 +271,6 @@ def word(request, keyword, n):
 def gloss(request, idgloss):
     """View of a gloss - mimics the word view, really for admin use
        when we want to preview a particular gloss"""
-
-    if 'feedbackmessage' in request.GET:
-        feedbackmessage = request.GET['feedbackmessage']
-    else:
-        feedbackmessage = False
 
     # we should only be able to get a single gloss, but since the URL
     # pattern could be spoofed, we might get zero or many
@@ -364,7 +348,6 @@ def gloss(request, idgloss):
                                'update_form': update_form,
                                'videoform': video_form,
                                'tagform': TagUpdateForm(),
-                               'feedbackmessage': feedbackmessage,
                                'SIGN_NAVIGATION' : settings.SIGN_NAVIGATION,
                                'SETTINGS_SHOW_TRADITIONAL' : settings.SHOW_TRADITIONAL,
                                'SETTINGS_SHOW_FREQUENCY' : settings.SHOW_FREQUENCY,
