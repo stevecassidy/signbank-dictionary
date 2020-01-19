@@ -21,11 +21,8 @@
    	<script src="{% static 'zoomgallery/magnific.js' %}"></script>
    	<script src="{% static 'zoomgallery/zoom.js' %}"></script>
 
-    <!-- JS required for video display -->
-    <script src="//vjs.zencdn.net/6.2.0/video.js"></script>
-    <script type="text/javascript" src="{% static 'js/videojs-looper.js' %}"></script>
-    <!-- end video JS -->
-
+    {% load_video_javascript %}
+ 
    	<script language='javascript'>
    		function topmap() {
             var winwidth = $( window ).width();

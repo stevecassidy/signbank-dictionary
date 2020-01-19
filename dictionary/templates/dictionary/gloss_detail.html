@@ -17,10 +17,8 @@
     <script type="text/javascript" src="{% static 'js/jquery.jeditable.checkbox.js'  %}"></script>
     <script type="text/javascript" src="{% static 'js/typeahead.bundle.min.js' %}"></script>
 
-    <!-- JS required for video display -->
-    <script src="//vjs.zencdn.net/6.2.0/video.js"></script>
-    <script type="text/javascript" src="{% static 'js/videojs-looper.js' %}"></script>
-        <!-- end video JS -->
+    {% load_video_javascript %}
+
 
     {% if perms.dictionary.change_gloss %}
 
