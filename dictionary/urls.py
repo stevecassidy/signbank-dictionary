@@ -39,6 +39,6 @@ urlpatterns = [
 
     # Admin views
     path('list/', permission_required('dictionary.search_gloss')(GlossListView.as_view()), name='admin_gloss_list'),
-    path('gloss/<int:pk>', permission_required('dictionary.search_gloss')(GlossDetailView.as_view()), name='admin_gloss_view'),
+    path('gloss/<int:pk>/', permission_required('dictionary.search_gloss')(GlossDetailView.as_view()), name='admin_gloss_view'),
 
 ]
