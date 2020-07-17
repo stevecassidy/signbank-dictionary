@@ -330,7 +330,7 @@ class Gloss(models.Model):
         return result
 
 
-    idgloss = models.CharField("ID Gloss", max_length=50, help_text="""
+    idgloss = models.CharField("ID Gloss", max_length=50, unique=True, help_text="""
     This is the unique identifying name of an entry of a sign form in the
 database. No two Sign Entry Names can be exactly the same, but a "Sign
 Entry Name" can be (and often is) the same as the Annotation Idgloss.""")
@@ -412,7 +412,9 @@ minor or insignificant ways that can be ignored.""")
     sense = models.IntegerField("Sense Number", null=True, blank=True, help_text="If there is more than one sense of a sign enter a number here, all signs with sense>1 will use the same video as sense=1")
     sense.list_filter_sense = True
 
-    sn = models.IntegerField("Sign Number", help_text="Sign Number must be a unique integer and defines the ordering of signs in the dictionary", null=True, blank=True, unique=True)
+    sn = models.IntegerField("Sign Number", 
+                            help_text="Sign Number must be a unique integer and defines the ordering of signs in the dictionary", 
+                            null=True, blank=True, unique=True)
             # this is a sign number - was trying
             # to be a primary key, also defines a sequence - need to keep the sequence
             # and allow gaps between numbers for inserting later signs

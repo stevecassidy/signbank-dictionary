@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required
 from tagging.models import TaggedItem, Tag
+from django.db import IntegrityError
 import os, shutil, re
 
 from .models import *
@@ -19,12 +20,14 @@ def add_gloss(request):
 
         form = GlossCreateForm(request.POST)
         if form.is_valid():
-
+            print("it's valid")
             gloss = form.save()
 
             return HttpResponseRedirect(reverse('dictionary:admin_gloss_view',
                                                 kwargs={'pk': gloss.id})+'?edit')
         else:
+            print("Not valid")
+            print(form.errors)
             return render(request, 'dictionary/add_gloss_form.html',
                           {'add_gloss_form': form}
                           )
@@ -126,6 +129,18 @@ def update_gloss(request, glossid):
                     gloss.sn = value
                     gloss.save()
                     newvalue = value
+        elif field == 'idgloss':
+            
+            # check we have no / in the value because that messes up URLs
+            if '/' in value:
+                return HttpResponseBadRequest("The idgloss cannot contain the '/' character")
+
+            try:
+                gloss.idgloss = value
+                gloss.save()
+                newvalue = value
+            except IntegrityError:
+                return HttpResponseBadRequest("The Idgloss must be unique, '%s' is already in use." % value)
 
         elif field == 'inWeb':
             # only modify if we have publish permission

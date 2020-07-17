@@ -18,7 +18,7 @@ urlpatterns = [
     path('tag/<tag>/', taglist, name='tag'),
 
     # and and alternate view for direct display of a gloss
-    path('gloss/<idgloss>.html', gloss, name='gloss'),
+    path('gloss/<idgloss>.html', gloss, name='gloss'), 
 
     path('search/', search, name="search"),
     path('search/region/', set_region, name='set_region'),

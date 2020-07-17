@@ -47,6 +47,17 @@ class GlossCreateForm(forms.ModelForm):
         model = Gloss
         fields = ['idgloss', 'annotation_idgloss', 'sn']
 
+    def clean_idgloss(self):
+        """Ensure that idgloss has no '/' characters"""
+
+        data = self.cleaned_data['idgloss']
+        print("here we are", data)
+        if '/' in data:
+            raise forms.ValidationError("The '/' character is not allowed in an idgloss")
+
+        return data
+
+
 
 class TagUpdateForm(forms.Form):
     """Form to add a new tag to a gloss"""
