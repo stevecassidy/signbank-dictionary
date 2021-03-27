@@ -348,16 +348,16 @@ minor or insignificant ways that can be ignored.""")
     language = models.ManyToManyField(Language)
 
     # these language fields are subsumed by the language field above
-    bsltf = models.NullBooleanField("BSL sign", null=True, blank=True)
-    asltf = models.NullBooleanField("ASL sign", null=True, blank=True)
+    bsltf = models.BooleanField("BSL sign", null=True, blank=True)
+    asltf = models.BooleanField("ASL sign", null=True, blank=True)
 
     # these fields should be reviewed - do we put them in another class too?
     aslgloss = models.CharField("ASL gloss", blank=True, max_length=50) # American Sign Language gloss
-    asloantf = models.NullBooleanField("ASL loan sign", null=True, blank=True)
+    asloantf = models.BooleanField("ASL loan sign", null=True, blank=True)
 
     # loans from british sign language
     bslgloss = models.CharField("BSL gloss", max_length=50, blank=True)
-    bslloantf = models.NullBooleanField("BSL loan sign", null=True, blank=True)
+    bslloantf = models.BooleanField("BSL loan sign", null=True, blank=True)
 
     ########
 
@@ -369,10 +369,10 @@ minor or insignificant ways that can be ignored.""")
     Enter the URL of a page to display on the regional view of this gloss or blank for a standard template""")
 
     blend = models.CharField("Blend of", max_length=100, null=True, blank=True) # This field type is a guess.
-    blendtf = models.NullBooleanField("Blend", null=True, blank=True)
+    blendtf = models.BooleanField("Blend", null=True, blank=True)
 
     compound = models.CharField("Compound of", max_length=100, blank=True) # This field type is a guess.
-    comptf = models.NullBooleanField("Compound", null=True, blank=True)
+    comptf = models.BooleanField("Compound", null=True, blank=True)
 
 
     # Phonology fields
@@ -399,8 +399,8 @@ minor or insignificant ways that can be ignored.""")
     final_relative_orientation = models.CharField("Final Interacting Dominant Hand Part", null=True, max_length=20, blank=True, choices=relOrientationChoices)
 
 
-    inWeb = models.NullBooleanField("In the Web dictionary", default=False)
-    isNew = models.NullBooleanField("Is this a proposed new sign?", null=True, default=False)
+    inWeb = models.BooleanField("In the Web dictionary", null=True, default=False)
+    isNew = models.BooleanField("Is this a proposed new sign?", null=True, default=False)
 
     inittext = models.CharField(max_length=50, blank=True)
 
