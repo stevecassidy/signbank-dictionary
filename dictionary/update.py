@@ -295,7 +295,7 @@ def update_relation(gloss, field, value):
             newvalue = rel.role.backwardmessage
     elif what == 'relationtarget':
 
-        target = gloss_from_identifer(value)
+        target = gloss_from_identifier(value)
         if target:
             rel.target = target
             rel.save()
